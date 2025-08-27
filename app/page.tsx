@@ -19,17 +19,14 @@ interface AnalysisResult {
   }>
 }
 
-interface GlitchEffect {
-  type: "cinematic-1" | "cinematic-2" | "position-shift"
-  intensity: number
-}
+// GlitchEffect interface removed
 
 export default function StoryIconizer() {
   const [inputText, setInputText] = useState("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [showResult, setShowResult] = useState(false)
-  const [glitchedLetters, setGlitchedLetters] = useState<Map<number, GlitchEffect>>(new Map())
+  // Removed title glitch effects as requested
   const [error, setError] = useState<string | null>(null)
   const [isErrorState, setIsErrorState] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -38,6 +35,7 @@ export default function StoryIconizer() {
   const [showTitle, setShowTitle] = useState(false);
   const [showLogline, setShowLogline] = useState(false);
   const [buttonGlitchActive, setButtonGlitchActive] = useState(false);
+  const [optionsGlitchActive, setOptionsGlitchActive] = useState(false);
 
   // Effect for initial mount animation
   useEffect(() => {
@@ -58,61 +56,14 @@ export default function StoryIconizer() {
   }, []);
 
 
-  // Effect for title glitching
-  useEffect(() => {
-    const createGlitchEffect = () => {
-      const title = "FRAGMENT.OS" // UPDATED TITLE
-      const titleLength = title.length
-      const randomIndex = Math.floor(Math.random() * titleLength)
-      
-      if (title[randomIndex] === ' ' || title[randomIndex] === '.') return;
-
-      const effects: GlitchEffect["type"][] = ["cinematic-1", "cinematic-2", "position-shift"]
-      const randomEffect = effects[Math.floor(Math.random() * effects.length)]
-      const intensity = Math.random() * 0.9 + 0.3
-
-      setGlitchedLetters((prev) =>
-        new Map(prev).set(randomIndex, {
-          type: randomEffect,
-          intensity,
-        }),
-      )
-
-      const effectDuration = Math.random() * 1000 + 500
-
-      setTimeout(
-        () => {
-          setGlitchedLetters((prev) => {
-            const newMap = new Map(prev)
-            newMap.delete(randomIndex)
-            return newMap
-          })
-        },
-        effectDuration,
-      )
-    }
-
-    const scheduleNextGlitch = () => {
-      const interval = Math.random() * 8000 + 10000; // Much less frequent: 10-18 seconds
-
-      const timeoutId = setTimeout(() => {
-        createGlitchEffect()
-        scheduleNextGlitch()
-      }, interval)
-
-      return () => clearTimeout(timeoutId);
-    }
-
-    const clear = scheduleNextGlitch()
-    return clear;
-  }, [])
+  // Title glitch effects removed as requested
 
   // Independent glitch system for Extract Symbols button
   useEffect(() => {
     if (!isAnalyzing) {
       const scheduleButtonGlitch = () => {
-        // Random delay between 25-60 seconds for button
-        const delay = 25000 + Math.random() * 35000;
+        // Random delay between 90-180 seconds for button (much less frequent)
+        const delay = 90000 + Math.random() * 90000;
         
         const timeoutId = setTimeout(() => {
           setButtonGlitchActive(true);
@@ -133,6 +84,31 @@ export default function StoryIconizer() {
       return cleanup;
     }
   }, [isAnalyzing])
+
+  // Independent glitch system for Options button (settings)
+  useEffect(() => {
+    const scheduleOptionsGlitch = () => {
+      // Random delay between 120-300 seconds for options (very rare)
+      const delay = 120000 + Math.random() * 180000;
+      
+      const timeoutId = setTimeout(() => {
+        setOptionsGlitchActive(true);
+        
+        // Options glitch lasts 250ms
+        setTimeout(() => {
+          setOptionsGlitchActive(false);
+        }, 250);
+        
+        // Schedule next glitch
+        scheduleOptionsGlitch();
+      }, delay);
+      
+      return () => clearTimeout(timeoutId);
+    };
+    
+    const cleanup = scheduleOptionsGlitch();
+    return cleanup;
+  }, [])
 
   const handleAnalyze = async () => {
     if (!inputText.trim()) return
@@ -208,49 +184,12 @@ export default function StoryIconizer() {
   }
 
   const renderTitle = () => {
-    const title = "FRAGMENT.OS" // UPDATED TITLE
-    return title.split("").map((char, index) => {
-      const glitch = glitchedLetters.get(index)
-      const isFragment = index < 8; // UPDATED LOGIC FOR COLOR SPLIT
-      const baseColor = isFragment ? "text-red-500" : "text-cyan-400"
-      const baseShadow = isFragment
-        ? "drop-shadow-[0_0_20px_rgba(239,68,68,0.8)] drop-shadow-[0_0_40px_rgba(239,68,68,0.4)]"
-        : "drop-shadow-[0_0_20px_rgba(6,182,212,0.8)] drop-shadow-[0_0_40px_rgba(6,182,212,0.4)]"
-
-      let glitchClasses = ""
-      let glitchStyle: React.CSSProperties = {}
-
-      if (glitch) {
-        switch (glitch.type) {
-          case "cinematic-1":
-            glitchClasses = 'animate-glitch-cinematic-1';
-            break;
-          case "cinematic-2":
-            glitchClasses = 'animate-glitch-cinematic-2';
-            break;
-          case "position-shift":
-            glitchStyle = {
-              transform: `translate(${(Math.random() - 0.5) * glitch.intensity * 8}px, ${(Math.random() - 0.5) * glitch.intensity * 4}px)`,
-              filter: `blur(${glitch.intensity * 1.5}px)`,
-            }
-            glitchClasses = baseColor
-            break;
-        }
-      } else {
-        glitchClasses = `${baseColor} ${baseShadow}`
-      }
-
-      return (
-        <span 
-          key={index} 
-          className={`relative transition-all duration-100 font-mono ${glitchClasses}`} 
-          style={glitchStyle}
-          data-text={char}
-        >
-          {char}
-        </span>
-      )
-    })
+    const title = "FRAGMENT.OS" // Keep original title
+    return (
+      <span className="text-gray-100 font-sans tracking-wide font-medium">
+        {title}
+      </span>
+    )
   }
   
   const handleTitleComplete = useCallback(() => {
@@ -266,10 +205,10 @@ export default function StoryIconizer() {
         '--mouse-y': `${mousePosition.y}px`,
       } as React.CSSProperties}
     >
-      <AudioControl />
+      <AudioControl optionsGlitchActive={optionsGlitchActive} />
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-cyan-950/20" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(220,38,38,0.03)_25%,rgba(220,38,38,0.03)_26%,transparent_27%,transparent_74%,rgba(6,182,212,0.03)_75%,rgba(6,182,212,0.03)_76%,transparent_77%)] bg-[length:100%_8px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(220,38,38,0.08)_25%,rgba(220,38,38,0.08)_26%,transparent_27%,transparent_74%,rgba(6,182,212,0.08)_75%,rgba(6,182,212,0.08)_76%,transparent_77%)] bg-[length:100%_16px]" />
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent animate-pulse" />
         <div
           className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent animate-pulse"
@@ -280,7 +219,7 @@ export default function StoryIconizer() {
       
       <div className={`relative z-10 flex flex-col h-full container mx-auto px-4 py-8 transition-transform duration-500 ${isShaking ? 'animate-shake' : ''}`}>
         <div className={`text-center flex-shrink-0 mb-8 transition-all duration-700 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-mono font-bold mb-4 tracking-wider relative">{renderTitle()}</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl mb-4 relative select-none">{renderTitle()}</h1>
           <div className="text-xs md:text-sm font-mono text-gray-500 tracking-widest opacity-60">
             &gt; symbolic_extraction_unit.exe
           </div>

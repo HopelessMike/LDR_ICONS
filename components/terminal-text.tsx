@@ -120,6 +120,11 @@ export function TerminalText({ text, className = "", delay = 0, onComplete, enab
         <span className="inline-block w-0.5 h-5 ml-1 bg-current terminal-cursor">
         </span>
       )}
+      {/* Invisible cursor placeholder to prevent layout shift */}
+      {(!showCursor || isComplete) && (
+        <span className="inline-block w-0.5 h-5 ml-1 opacity-0">
+        </span>
+      )}
     </span>
   )
 }
