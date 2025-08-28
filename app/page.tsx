@@ -3,7 +3,6 @@
 import type React from "react"
 
 import { useState, useEffect, useCallback } from "react"
-import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { IconReveal } from "@/components/icon-reveal"
 import { TerminalText } from "@/components/terminal-text"
@@ -186,8 +185,10 @@ export default function StoryIconizer() {
   const renderTitle = () => {
     const title = "Fragment.OS"
     return (
-      <span className="text-gray-300 font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-[0.25em] fragment-title-dystopian select-none relative">
+      <span className="glitch-title select-none" data-text={title}>
         {title}
+        <span aria-hidden="true">{title}</span>
+        <span aria-hidden="true">{title}</span>
       </span>
     )
   }
@@ -219,7 +220,7 @@ export default function StoryIconizer() {
       
       <div className={`relative z-10 flex flex-col h-full container mx-auto px-4 py-8 transition-transform duration-500 ${isShaking ? 'animate-shake' : ''}`}>
         <div className={`text-center flex-shrink-0 mb-8 transition-all duration-700 px-4 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 relative select-none break-words">{renderTitle()}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 relative break-words">{renderTitle()}</h1>
           <div className="text-xs md:text-sm font-mono text-gray-400 tracking-widest opacity-75 break-words px-2 subtle-glow">
             &gt; symbolic_extraction_unit.exe
           </div>
@@ -240,14 +241,20 @@ export default function StoryIconizer() {
             </div>
 
             <div className="flex justify-center">
-              <Button
+              <button
                 onClick={handleAnalyze}
                 disabled={!inputText.trim() || isAnalyzing}
-                className={`px-6 md:px-8 py-3 bg-red-900/30 hover:bg-red-800/50 border border-red-700/50 hover:border-red-500/70 text-red-400 hover:text-red-300 font-mono tracking-wider transition-all duration-200 disabled:opacity-30 disabled:hover:bg-red-900/30 disabled:hover:border-red-700/50 disabled:hover:text-red-400 disabled:hover:shadow-none disabled:hover:scale-100 disabled:hover:brightness-100 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:scale-105 hover:brightness-110 text-sm md:text-base button-hover-effect ${buttonGlitchActive ? 'animate-idle-glitch' : ''}`}
+                className={`btn-neon-frame ${buttonGlitchActive ? 'animate-idle-glitch' : ''}`}
+                aria-busy={isAnalyzing}
               >
-                {isAnalyzing ? "PROCESSING..." : "EXTRACT_SYMBOLS"}
-              </Button>
+                <span>{isAnalyzing ? "PROCESSING..." : "EXTRACT_SYMBOLS"}</span>
+                <div className="top" />
+                <div className="bottom" />
+                <div className="left" />
+                <div className="right" />
+              </button>
             </div>
+
 
             {error && (
               <div className="text-center">
