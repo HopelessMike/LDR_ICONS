@@ -30,7 +30,7 @@ export function AudioControl({ optionsGlitchActive = false }: AudioControlProps)
     <div className="fixed top-4 right-4 z-50">
       <button
         onClick={() => setShowPanel(!showPanel)}
-        className={`p-2 rounded bg-black/90 border border-gray-800 text-gray-400 hover:text-cyan-400 transition-colors duration-200 ${optionsGlitchActive ? 'animate-idle-glitch' : ''}`}
+        className={`p-2 rounded bg-black/90 border border-gray-800 text-gray-400 hover:text-cyan-400 hover:animate-hover-glitch transition-colors duration-200 ${optionsGlitchActive ? 'animate-idle-glitch' : ''}`}
         title="Settings"
       >
         <Settings className="w-5 h-5" />
@@ -42,7 +42,7 @@ export function AudioControl({ optionsGlitchActive = false }: AudioControlProps)
           <button
             onClick={toggleAudio}
             className={cn(
-              "w-full flex items-center gap-2 p-2 rounded text-sm font-mono transition-colors duration-200",
+              "w-full flex items-center gap-2 p-2 rounded text-sm font-mono transition-colors duration-200 hover:animate-hover-glitch",
               isEnabled 
                 ? "text-cyan-400 bg-cyan-950/30 hover:bg-cyan-950/50" 
                 : "text-gray-500 hover:bg-gray-800/50"

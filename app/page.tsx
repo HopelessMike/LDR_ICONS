@@ -62,8 +62,8 @@ export default function StoryIconizer() {
   useEffect(() => {
     if (!isAnalyzing) {
       const scheduleButtonGlitch = () => {
-        // Random delay between 90-180 seconds for button (much less frequent)
-        const delay = 90000 + Math.random() * 90000;
+        // Random delay between 10-20 seconds for button (more frequent but controlled)
+        const delay = 10000 + Math.random() * 10000;
         
         const timeoutId = setTimeout(() => {
           setButtonGlitchActive(true);
@@ -88,8 +88,8 @@ export default function StoryIconizer() {
   // Independent glitch system for Options button (settings)
   useEffect(() => {
     const scheduleOptionsGlitch = () => {
-      // Random delay between 120-300 seconds for options (very rare)
-      const delay = 120000 + Math.random() * 180000;
+      // Random delay between 12-25 seconds for options (more frequent but still independent)
+      const delay = 12000 + Math.random() * 13000;
       
       const timeoutId = setTimeout(() => {
         setOptionsGlitchActive(true);
@@ -184,9 +184,9 @@ export default function StoryIconizer() {
   }
 
   const renderTitle = () => {
-    const title = "FRAGMENT.OS" // Keep original title
+    const title = "Fragment.OS"
     return (
-      <span className="text-gray-100 font-sans tracking-wide font-medium">
+      <span className="text-gray-300 font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-[0.25em] fragment-title-dystopian select-none relative">
         {title}
       </span>
     )
@@ -208,7 +208,7 @@ export default function StoryIconizer() {
       <AudioControl optionsGlitchActive={optionsGlitchActive} />
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-cyan-950/20" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(220,38,38,0.08)_25%,rgba(220,38,38,0.08)_26%,transparent_27%,transparent_74%,rgba(6,182,212,0.08)_75%,rgba(6,182,212,0.08)_76%,transparent_77%)] bg-[length:100%_16px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(220,38,38,0.1)_25%,rgba(220,38,38,0.1)_26%,transparent_27%,transparent_74%,rgba(6,182,212,0.1)_75%,rgba(6,182,212,0.1)_76%,transparent_77%)] bg-[length:100%_18px]" />
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent animate-pulse" />
         <div
           className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent animate-pulse"
@@ -218,9 +218,9 @@ export default function StoryIconizer() {
       </div>
       
       <div className={`relative z-10 flex flex-col h-full container mx-auto px-4 py-8 transition-transform duration-500 ${isShaking ? 'animate-shake' : ''}`}>
-        <div className={`text-center flex-shrink-0 mb-8 transition-all duration-700 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl mb-4 relative select-none">{renderTitle()}</h1>
-          <div className="text-xs md:text-sm font-mono text-gray-500 tracking-widest opacity-60">
+        <div className={`text-center flex-shrink-0 mb-8 transition-all duration-700 px-4 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 relative select-none break-words">{renderTitle()}</h1>
+          <div className="text-xs md:text-sm font-mono text-gray-400 tracking-widest opacity-75 break-words px-2 subtle-glow">
             &gt; symbolic_extraction_unit.exe
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function StoryIconizer() {
               <Button
                 onClick={handleAnalyze}
                 disabled={!inputText.trim() || isAnalyzing}
-                className={`px-6 md:px-8 py-3 bg-red-900/30 hover:bg-red-800/40 border border-red-700/50 text-red-400 font-mono tracking-wider transition-all duration-300 disabled:opacity-30 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] text-sm md:text-base ${buttonGlitchActive ? 'animate-idle-glitch' : ''}`}
+                className={`px-6 md:px-8 py-3 bg-red-900/30 hover:bg-red-800/50 border border-red-700/50 hover:border-red-500/70 text-red-400 hover:text-red-300 font-mono tracking-wider transition-all duration-200 disabled:opacity-30 disabled:hover:bg-red-900/30 disabled:hover:border-red-700/50 disabled:hover:text-red-400 disabled:hover:shadow-none disabled:hover:scale-100 disabled:hover:brightness-100 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:scale-105 hover:brightness-110 text-sm md:text-base button-hover-effect ${buttonGlitchActive ? 'animate-idle-glitch' : ''}`}
               >
                 {isAnalyzing ? "PROCESSING..." : "EXTRACT_SYMBOLS"}
               </Button>
@@ -259,7 +259,7 @@ export default function StoryIconizer() {
           </div>
 
           <div className={`space-y-8 min-h-[300px] md:min-h-[350px] flex flex-col justify-center transition-all duration-700 delay-300 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-            <div className="flex justify-center items-center gap-6 md:gap-8 lg:gap-12 flex-wrap">
+            <div className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 flex-wrap">
               {Array.from({ length: 3 }).map((_, index) => (
                 <IconReveal
                   key={index}
@@ -273,14 +273,14 @@ export default function StoryIconizer() {
               ))}
             </div>
 
-            <div className="text-center space-y-4 min-h-[120px] md:min-h-[100px] flex flex-col justify-center mt-8">
+            <div className="text-center space-y-4 min-h-[120px] md:min-h-[100px] flex flex-col justify-center mt-8 px-4">
               {result && showResult && (
                 <div className="space-y-4">
                   {showTitle && (
                     <div className="flex justify-center">
                       <TerminalText
                         text={result.title}
-                        className={`text-xl md:text-2xl font-mono tracking-wider mb-3 ${isErrorState ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)]' : 'text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]'}`}
+                        className={`text-lg sm:text-xl md:text-2xl font-mono tracking-wider mb-3 break-words max-w-full ${isErrorState ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)]' : 'text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]'}`}
                         delay={100}
                         onComplete={handleTitleComplete}
                         enableSound={true}
@@ -292,7 +292,7 @@ export default function StoryIconizer() {
                     <div className="flex justify-center">
                       <TerminalText
                         text={result.logline}
-                        className="text-xs md:text-sm font-mono text-gray-400 max-w-2xl mx-auto opacity-80 px-4"
+                        className="text-xs md:text-sm font-mono text-gray-400 max-w-2xl mx-auto opacity-80 px-4 break-words word-wrap"
                         delay={0}
                         enableBackspace={true}
                         enableSound={true}

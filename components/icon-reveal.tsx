@@ -212,9 +212,7 @@ import {
   Amphora,
   Aperture,
   Armchair,
-  Axes,
   Banana,
-  Barrel,
   Banknote,
   Bath,
   BatteryCharging,
@@ -227,12 +225,9 @@ import {
   Bitcoin,
   BicepsFlexed,
   Bone,
-  BottleWine as Bottle,
-  BowArrow,
   BrainCircuit,
   Box,
   Brush,
-  Bubbles,
   Cake,
   CakeSlice,
   Calculator,
@@ -265,7 +260,6 @@ import {
   Disc3,
   Dices,
   Drama,
-  Dribbble,
   Drum,
   Drumstick,
   Dumbbell,
@@ -294,19 +288,14 @@ import {
   Grape,
   Guitar,
   Ham,
-  Hamburger,
   Hand,
-  HandFist,
   HandMetal,
-  Handbag,
   Handshake,
-  HatGlasses,
   Haze,
   HeartCrack,
   Hospital,
   House,
   IceCreamCone,
-  Kayak,
   Lamp,
   LifeBuoy,
   MapPinned,
@@ -319,7 +308,6 @@ import {
   Mouse,
   Origami,
   PackageOpen,
-  Panda,
   Paperclip,
   PartyPopper,
   Piano,
@@ -335,7 +323,6 @@ import {
   RadioTower,
   Recycle,
   Rewind,
-  Rose,
   Sailboat,
   Salad,
   Sandwich,
@@ -345,7 +332,6 @@ import {
   ShoppingCart,
   Shovel,
   ShowerHead,
-  Shrimp,
   Shuffle,
   Siren,
   Snail,
@@ -360,7 +346,6 @@ import {
   TestTubeDiagonal,
   ThumbsDown,
   Ticket,
-  Toilet,
   Tractor,
   TrafficCone,
   TrainFront,
@@ -369,7 +354,6 @@ import {
   Turtle as TurtleIcon,
   Tv,
   Utensils,
-  VenusAndMars,
   Volleyball,
   Wallet as WalletIcon,
   WandSparkles,
@@ -390,11 +374,12 @@ interface IconRevealProps {
 }
 
 const iconMap: Record<string, React.ComponentType<any>> = {
-  satellite: Satellite, memory: Brain, ghost: Ghost, heart: Heart, star: Star, zap: Zap, shield: Shield, eye: Eye, compass: Compass, crown: Crown, flame: Flame, moon: Moon, skull: Skull, cpu: Cpu, database: Database, lock: Lock, wifi: Wifi, terminal: Terminal, bug: Bug, code: Code, server: Server, harddrive: HardDrive, sword: Sword, diamond: Diamond, key: Key, hourglass: Hourglass, tree: TreePine, mountain: Mountain, wave: Waves, lightning: Lightning, butterfly: Bug, rose: Flower, anchor: Anchor, feather: Feather, crystal: Gem, spiral: Zap, mask: Eye, mirror: Shield, door: Terminal, phoenix: Bird, dragon: Flame, wolf: Dog, raven: Bird, spider: Bug, serpent: Waves, labyrinth: Grid3X3, prism: Diamond, vortex: Zap, nexus: Network, eclipse: Moon, nebula: Star, quantum: Atom, neural: Neural, matrix: Grid3X3, void: Terminal, chaos: Zap, order: Grid3X3, infinity: Infinity, bot: Bot, binary: Binary, circuit: CircuitBoard, dna: Dna, fingerprint: Fingerprint, glasses: Glasses, lightbulb: Lightbulb, microscope: Microscope, plug: Plug, power: Power, radio: Radio, rocket: Rocket, settings: Settings, target: Target, users: Users, wrench: Wrench, crosshair: Crosshair, focus: Focus, gamepad: Gamepad2, headphones: Headphones, image: Image, layers: Layers, music: Music, palette: Palette, puzzle: Puzzle, scan: Scan, search: Search, sound: Volume2, wind: Wind, briefcase: Briefcase, building: Building, calendar: Calendar, car: Car, clock: Clock, coins: Coins, document: FileText, folder: Folder, globe: Globe, home: Home, location: MapPin, percent: Percent, printer: Printer, ruler: Ruler, bag: ShoppingBag, truck: Truck, umbrella: Umbrella, wallet: Wallet, bookmark: Bookmark, book: Book, pen: Pen, trophy: Trophy, gift: Gift, stamp: Stamp, scissors: Scissors, paint: PaintBucket, camera: Camera, film: Film, microphone: Mic, speaker: Speaker, phone: Phone, mail: Mail, message: MessageCircle, share: Share, like: ThumbsUp, video: Video, warning: AlertTriangle, info: Info, success: CheckCircle, error: XCircle, help: HelpCircle, plus: Plus, minus: Minus, close: X, check: Check, up: ArrowUp, down: ArrowDown, left: ArrowLeft, right: ArrowRight, smile: Smile, frown: Frown, meh: Meh, angry: Angry, laugh: Laugh, baby: Baby, user: User, usercheck: UserCheck, userx: UserX, people: People, standing: PersonStanding, sun: Sun, rain: CloudRain, snow: Snowflake, pine: TreePine, flower: Flower, leaf: Leaf, water: Droplets, storm: CloudLightning, rainbow: Rainbow, cat: Cat, dog: Dog, fish: Fish, rabbit: Rabbit, turtle: Turtle, sunrise: Sunrise, sunset: Sunset, timer: Timer, stopwatch: Timer, days: CalendarDays, handshake: HeartHandshake, kiss: Heart, child: Baby, cross: Cross, tomb: Cross, smartphone: Smartphone, laptop: Laptop, monitor: Monitor, tablet: Tablet, bluetooth: Bluetooth, usb: Usb, storage: Storage, memory_stick: MemoryStick, bomb: Bomb, crosshairs: Crosshair, shield_alert: ShieldAlert, wand: Wand2, sparkles: Sparkles, plane: Plane, train: Train, ship: Ship, bike: Bike, apple: Apple, coffee: Coffee, wine: Wine, food: UtensilsCrossed, megaphone: Megaphone, radio_wave: RadioWave, antenna: Antenna, battery: Battery, battery_low: BatteryLow, fuel: Fuel, shield_check: ShieldCheck, shield_x: ShieldX, key_round: KeyRound, pill: Pill, stethoscope: Stethoscope, thermometer: Thermometer, syringe: Syringe, graduation: GraduationCap, school: School, library: Library, paintbrush: Paintbrush, art_palette: ArtPalette, medal: Medal, award: Award, dollar: DollarSign, trending_up: TrendingUp, trending_down: TrendingDown, bar_chart: BarChart, pie_chart: PieChart, hammer: Hammer, screwdriver: Wrench, drill: Drill, temperature: Thermometer, gauge: Gauge, orbit: Orbit, telescope: Telescope, forever: Infinity, circle_dot: CircleDot, square: Square, triangle: Triangle, hexagon: Hexagon, accessibility: Accessibility, activity: Activity, alarm: AlarmClock, ambulance: Ambulance, amphora: Amphora, aperture: Aperture, armchair: Armchair, axes: Axes, banana: Banana, barrel: Barrel, banknote: Banknote, bath: Bath, battery_charging: BatteryCharging, bed: BedSingle, beef: Beef, beer: Beer, bell: Bell, binoculars: Binoculars, biohazard: Biohazard, bitcoin: Bitcoin, biceps: BicepsFlexed, bone: Bone, bottle: Bottle, bow: BowArrow, brain_circuit: BrainCircuit, box: Box, brush: Brush, bubbles: Bubbles, cake: Cake, cake_slice: CakeSlice, calculator: Calculator, candy: Candy, candy_cane: CandyCane, taxi: CarTaxiFront, carrot: Carrot, castle: Castle, cctv: Cctv, chart: ChartColumnIncreasing, chef: ChefHat, cherry: Cherry, church: Church, cigarette: Cigarette, cigarette_off: CigaretteOff, parking: CircleParking, power_circle: CirclePower, citrus: Citrus, clapperboard: Clapperboard, clipboard: ClipboardCheck, cloud: Cloud, drizzle: CloudDrizzle, cloud_moon: CloudMoon, cloud_sun: CloudSun, clover: Clover, cog: Cog, cookie: Cookie, pot: CookingPot, croissant: Croissant, disc: Disc3, dice: Dices, drama: Drama, dribbble: Dribbble, drum: Drum, drumstick: Drumstick, dumbbell: Dumbbell, ear: Ear, ear_off: EarOff, earth: Earth, eclipse_icon: Eclipse, egg: Egg, fried_egg: EggFried, eraser: Eraser, euro: Euro, expand: Expand, eye_closed: EyeClosed, eye_off: EyeOff, factory: Factory, ferris_wheel: FerrisWheel, fire_extinguisher: FireExtinguisher, flag: Flag, flame_kindling: FlameKindling, flashlight: Flashlight, flask: FlaskConical, flower2: Flower2, footprints: Footprints, gamepad_alt: Gamepad, glass_water: GlassWater, grape: Grape, guitar: Guitar, ham: Ham, hamburger: Hamburger, hand: Hand, fist: HandFist, metal: HandMetal, handbag: Handbag, handshake_icon: Handshake, hat_glasses: HatGlasses, haze: Haze, heart_crack: HeartCrack, hospital: Hospital, house_icon: House, ice_cream: IceCreamCone, kayak: Kayak, lamp: Lamp, life_buoy: LifeBuoy, map_pinned: MapPinned, martini: Martini, megaphone_icon: MegaphoneIcon, message_heart: MessageCircleHeart, mic_vocal: MicVocal, milk: Milk, minimize: Minimize2, mouse: Mouse, origami: Origami, package_open: PackageOpen, panda: Panda, paperclip: Paperclip, party: PartyPopper, piano: Piano, pi: Pi, pickaxe: Pickaxe, piggy_bank: PiggyBank, pizza: Pizza, popcorn: Popcorn, pyramid: Pyramid, rat: Rat, radar: Radar, radiation: Radiation, radio_tower: RadioTower, recycle: Recycle, rewind: Rewind, rose_icon: Rose, sailboat: Sailboat, salad: Salad, sandwich: Sandwich, scale: Scale, ship_wheel: ShipWheel, shirt: Shirt, shopping_cart: ShoppingCart, shovel: Shovel, shower: ShowerHead, shrimp: Shrimp, shuffle: Shuffle, siren: Siren, snail: Snail, sofa: Sofa, soup: Soup, speech: Speech, sprout: Sprout, squirrel: Squirrel, swords: Swords, tag: Tag, tent: Tent, test_tube: TestTubeDiagonal, thumbs_down: ThumbsDown, ticket: Ticket, toilet: Toilet, tractor: Tractor, traffic_cone: TrafficCone, train_front: TrainFront, trash: Trash2, tree_alt: Tree, turtle_alt: TurtleIcon, tv: Tv, utensils: Utensils, venus_mars: VenusAndMars, volleyball: Volleyball, wallet_alt: WalletIcon, wand_sparkles: WandSparkles, watch: Watch, wifi_alt: WifiIcon, wine_alt: WineIcon
+  satellite: Satellite, memory: Brain, ghost: Ghost, heart: Heart, star: Star, zap: Zap, shield: Shield, eye: Eye, compass: Compass, crown: Crown, flame: Flame, moon: Moon, skull: Skull, cpu: Cpu, database: Database, lock: Lock, wifi: Wifi, terminal: Terminal, bug: Bug, code: Code, server: Server, harddrive: HardDrive, sword: Sword, diamond: Diamond, key: Key, hourglass: Hourglass, tree: TreePine, mountain: Mountain, wave: Waves, lightning: Lightning, butterfly: Bug, rose: Flower, anchor: Anchor, feather: Feather, crystal: Gem, spiral: Zap, mask: Eye, mirror: Shield, door: Terminal, phoenix: Bird, dragon: Flame, wolf: Dog, raven: Bird, spider: Bug, serpent: Waves, labyrinth: Grid3X3, prism: Diamond, vortex: Zap, nexus: Network, eclipse: Moon, nebula: Star, quantum: Atom, neural: Neural, matrix: Grid3X3, void: Terminal, chaos: Zap, order: Grid3X3, infinity: Infinity, bot: Bot, binary: Binary, circuit: CircuitBoard, dna: Dna, fingerprint: Fingerprint, glasses: Glasses, lightbulb: Lightbulb, microscope: Microscope, plug: Plug, power: Power, radio: Radio, rocket: Rocket, settings: Settings, target: Target, users: Users, wrench: Wrench, crosshair: Crosshair, focus: Focus, gamepad: Gamepad2, headphones: Headphones, image: Image, layers: Layers, music: Music, palette: Palette, puzzle: Puzzle, scan: Scan, search: Search, sound: Volume2, wind: Wind, briefcase: Briefcase, building: Building, calendar: Calendar, car: Car, clock: Clock, coins: Coins, document: FileText, folder: Folder, globe: Globe, home: Home, location: MapPin, percent: Percent, printer: Printer, ruler: Ruler, bag: ShoppingBag, truck: Truck, umbrella: Umbrella, wallet: Wallet, bookmark: Bookmark, book: Book, pen: Pen, trophy: Trophy, gift: Gift, stamp: Stamp, scissors: Scissors, paint: PaintBucket, camera: Camera, film: Film, microphone: Mic, speaker: Speaker, phone: Phone, mail: Mail, message: MessageCircle, share: Share, like: ThumbsUp, video: Video, warning: AlertTriangle, info: Info, success: CheckCircle, error: XCircle, help: HelpCircle, plus: Plus, minus: Minus, close: X, check: Check, up: ArrowUp, down: ArrowDown, left: ArrowLeft, right: ArrowRight, smile: Smile, frown: Frown, meh: Meh, angry: Angry, laugh: Laugh, baby: Baby, user: User, usercheck: UserCheck, userx: UserX, people: People, standing: PersonStanding, sun: Sun, rain: CloudRain, snow: Snowflake, pine: TreePine, flower: Flower, leaf: Leaf, water: Droplets, storm: CloudLightning, rainbow: Rainbow, cat: Cat, dog: Dog, fish: Fish, rabbit: Rabbit, turtle: Turtle, sunrise: Sunrise, sunset: Sunset, timer: Timer, stopwatch: Timer, days: CalendarDays, handshake: HeartHandshake, kiss: Heart, child: Baby, cross: Cross, tomb: Cross, smartphone: Smartphone, laptop: Laptop, monitor: Monitor, tablet: Tablet, bluetooth: Bluetooth, usb: Usb, storage: Storage, memory_stick: MemoryStick, bomb: Bomb, crosshairs: Crosshair, shield_alert: ShieldAlert, wand: Wand2, sparkles: Sparkles, plane: Plane, train: Train, ship: Ship, bike: Bike, apple: Apple, coffee: Coffee, wine: Wine, food: UtensilsCrossed, megaphone: Megaphone, radio_wave: RadioWave, antenna: Antenna, battery: Battery, battery_low: BatteryLow, fuel: Fuel, shield_check: ShieldCheck, shield_x: ShieldX, key_round: KeyRound, pill: Pill, stethoscope: Stethoscope, thermometer: Thermometer, syringe: Syringe, graduation: GraduationCap, school: School, library: Library, paintbrush: Paintbrush, art_palette: ArtPalette, medal: Medal, award: Award, dollar: DollarSign, trending_up: TrendingUp, trending_down: TrendingDown, bar_chart: BarChart, pie_chart: PieChart, hammer: Hammer, screwdriver: Wrench, drill: Drill, temperature: Thermometer, gauge: Gauge, orbit: Orbit, telescope: Telescope, forever: Infinity, circle_dot: CircleDot, square: Square, triangle: Triangle, hexagon: Hexagon, accessibility: Accessibility, activity: Activity, alarm: AlarmClock, ambulance: Ambulance, amphora: Amphora, aperture: Aperture, armchair: Armchair, banana: Banana, banknote: Banknote, bath: Bath, battery_charging: BatteryCharging, bed: BedSingle, beef: Beef, beer: Beer, bell: Bell, binoculars: Binoculars, biohazard: Biohazard, bitcoin: Bitcoin, biceps: BicepsFlexed, bone: Bone, brain_circuit: BrainCircuit, box: Box, brush: Brush, cake: Cake, cake_slice: CakeSlice, calculator: Calculator, candy: Candy, candy_cane: CandyCane, taxi: CarTaxiFront, carrot: Carrot, castle: Castle, cctv: Cctv, chart: ChartColumnIncreasing, chef: ChefHat, cherry: Cherry, church: Church, cigarette: Cigarette, cigarette_off: CigaretteOff, parking: CircleParking, power_circle: CirclePower, citrus: Citrus, clapperboard: Clapperboard, clipboard: ClipboardCheck, cloud: Cloud, drizzle: CloudDrizzle, cloud_moon: CloudMoon, cloud_sun: CloudSun, clover: Clover, cog: Cog, cookie: Cookie, pot: CookingPot, croissant: Croissant, disc: Disc3, dice: Dices, drama: Drama, drum: Drum, drumstick: Drumstick, dumbbell: Dumbbell, ear: Ear, ear_off: EarOff, earth: Earth, eclipse_icon: Eclipse, egg: Egg, fried_egg: EggFried, eraser: Eraser, euro: Euro, expand: Expand, eye_closed: EyeClosed, eye_off: EyeOff, factory: Factory, ferris_wheel: FerrisWheel, fire_extinguisher: FireExtinguisher, flag: Flag, flame_kindling: FlameKindling, flashlight: Flashlight, flask: FlaskConical, flower2: Flower2, footprints: Footprints, gamepad_alt: Gamepad, glass_water: GlassWater, grape: Grape, guitar: Guitar, ham: Ham, hand: Hand, metal: HandMetal, handshake_icon: Handshake, haze: Haze, heart_crack: HeartCrack, hospital: Hospital, house_icon: House, ice_cream: IceCreamCone, lamp: Lamp, life_buoy: LifeBuoy, map_pinned: MapPinned, martini: Martini, megaphone_icon: MegaphoneIcon, message_heart: MessageCircleHeart, mic_vocal: MicVocal, milk: Milk, minimize: Minimize2, mouse: Mouse, origami: Origami, package_open: PackageOpen, paperclip: Paperclip, party: PartyPopper, piano: Piano, pi: Pi, pickaxe: Pickaxe, piggy_bank: PiggyBank, pizza: Pizza, popcorn: Popcorn, pyramid: Pyramid, rat: Rat, radar: Radar, radiation: Radiation, radio_tower: RadioTower, recycle: Recycle, rewind: Rewind, sailboat: Sailboat, salad: Salad, sandwich: Sandwich, scale: Scale, ship_wheel: ShipWheel, shirt: Shirt, shopping_cart: ShoppingCart, shovel: Shovel, shower: ShowerHead, shuffle: Shuffle, siren: Siren, snail: Snail, sofa: Sofa, soup: Soup, speech: Speech, sprout: Sprout, squirrel: Squirrel, swords: Swords, tag: Tag, tent: Tent, test_tube: TestTubeDiagonal, thumbs_down: ThumbsDown, ticket: Ticket, tractor: Tractor, traffic_cone: TrafficCone, train_front: TrainFront, trash: Trash2, tree_alt: Tree, turtle_alt: TurtleIcon, tv: Tv, utensils: Utensils, volleyball: Volleyball, wallet_alt: WalletIcon, wand_sparkles: WandSparkles, watch: Watch, wifi_alt: WifiIcon, wine_alt: WineIcon
 }
 
 const randomIcons = Object.keys(iconMap)
 const initialIcons = ["heart", "skull", "bot"] // Icone iniziali
+const initialReasons = ["emotional_core_module", "mortality_analysis_unit", "artificial_intelligence_matrix"] // Spiegazioni per icone iniziali
 
 export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex }: IconRevealProps) {
   const [currentIcon, setCurrentIcon] = useState(initialIcons[slotIndex] || "terminal")
@@ -406,6 +391,7 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
   const [glitchType, setGlitchType] = useState<'normal' | 'intense'>('normal')
   const [isRolling, setIsRolling] = useState(false);
   const [individualGlitchActive, setIndividualGlitchActive] = useState(false);
+  const [currentReason, setCurrentReason] = useState(initialReasons[slotIndex] || "system_module")
 
   // Main effect for controlling icon states (rolling, locking, idle)
   useEffect(() => {
@@ -434,8 +420,10 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
         setIsEpicLocking(true);
         
         const finalIcon = icon || "help";
+        const finalReason = reason || "unknown_data_fragment";
         setCurrentIcon(finalIcon);
         setDisplayIcon(finalIcon);
+        setCurrentReason(finalReason);
         setIsLocked(true);
 
         // Play lock sound with slight pitch variation based on slot index
@@ -459,8 +447,10 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
       }
       setIsRolling(false);
       const initialIcon = initialIcons[slotIndex] || "terminal";
+      const initialReason = initialReasons[slotIndex] || "system_module";
       setCurrentIcon(initialIcon);
       setDisplayIcon(initialIcon);
+      setCurrentReason(initialReason);
       setIsLocked(false);
     }
 
@@ -551,7 +541,7 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
     <div className="relative">
       <div
         className={cn(
-          "w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 border-2 bg-black/90 flex items-center justify-center relative overflow-hidden cursor-pointer transition-all duration-500",
+          "w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 border-2 bg-black/90 flex items-center justify-center relative overflow-hidden cursor-pointer transition-all duration-500",
           (isAnalyzing || isRolling) && "border-gray-600/70 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-static-overlay-border", // Static/noise border during analysis
           isLocked && lockedColorClass,
           !isAnalyzing && !isRolling && !show && "border-gray-800/50",
@@ -561,7 +551,7 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
       >
         <IconComponent
           className={cn(
-            "w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 transition-all duration-300 relative z-10",
+            "w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 transition-all duration-300 relative z-10",
             (isAnalyzing || isRolling) && "text-gray-400 animate-pulse-glitch", // Icona glitchata durante l'analisi
             isLocked && lockedIconColorClass,
             !isAnalyzing && !isRolling && !show && individualGlitchActive && `text-gray-600 ${glitchType === 'intense' ? 'animate-idle-glitch-intense' : 'animate-idle-glitch'}`, // Independent glitch for idle icons
@@ -581,15 +571,17 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
         {isLocked && <div className={cn("absolute inset-0 border-2 animate-pulse", isError ? "border-yellow-500/60" : "border-red-500/60")} />}
       </div>
 
-      {showTooltip && isLocked && reason && (
+      {showTooltip && currentReason && (
         <div className={cn(
             "absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-black/95 p-2 md:p-3 rounded text-xs font-mono max-w-xs z-20 animate-fade-in tooltip-glitch", // Glitch sul tooltip
              isError 
                 ? "border border-yellow-700/50 text-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.2)]"
-                : "border border-red-700/50 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                : isLocked
+                ? "border border-red-700/50 text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                : "border border-gray-700/50 text-gray-400 shadow-[0_0_20px_rgba(156,163,175,0.2)]"
             )}
         >
-          &gt; {reason}
+          &gt; {currentReason}
         </div>
       )}
 

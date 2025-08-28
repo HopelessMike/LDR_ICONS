@@ -4,7 +4,12 @@
       "Bash(npm run lint)",
       "Bash(npx next lint:*)",
       "Bash(pnpm run:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(npm run dev:*)",
+      "Bash(npm run build:*)",
+      "Bash(timeout 10 npm run build:*)",
+      "Bash(timeout 15 npm run dev)",
+      "Bash(npm run start:*)"
     ],
     "deny": [],
     "ask": []

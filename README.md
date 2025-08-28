@@ -8,12 +8,15 @@ Una webapp futuristica con estetica Black Mirror e Love, Death & Robots che tras
 - **AI "Modulo di Estrazione Simbolica"**: Sistema intelligente che opera come un'AI corrotta per analizzare narrazioni e generare output criptici
 - **Prompt Ottimizzato Anti-Overfitting**: Algoritmo avanzato che evita la ripetizione di pattern ed esempi, massimizzando creatività e varietà
 - **Rilevamento Lingua Automatico**: Supporta Italiano, Inglese, Francese, Spagnolo e Tedesco con prompts specificamente adattati per ogni lingua
-- **140+ Icone Simboliche**: Vasta collezione di icone Lucide per rappresentare concetti astratti e letterali
-- **Effetti Visivi Epici**: 
-  - Glitch casuali sulle icone in stato idle
-  - Effetto "Epic Lock" al momento del reveal di ogni simbolo
-  - Animazione typewriter per titoli e logline
-  - Delay sequenziali per massimo impatto drammatico
+- **120+ Icone Simboliche**: Vastissima collezione di icone Lucide per rappresentare concetti astratti, emotivi e letterali
+- **Sistema Audio Immersivo**: Suoni cyberpunk sincronizzati con animazioni (scansione, typewriter, boot sounds)
+- **Effetti Visivi Epici Rinnovati**: 
+  - Glitch indipendenti e meno frequenti per non disturbare l'esperienza utente
+  - Effetto "Epic Lock" potenziato al momento del reveal di ogni simbolo
+  - Animazioni typewriter realistiche con backspace casuali e velocità variabile
+  - Cursore personalizzato in stile terminal su tutta l'interfaccia
+  - Background con bande visive migliorate e spotlight effetto del mouse
+  - Delay sequenziali ottimizzati per massimo impatto drammatico
 - **Output in Stile Sistema**: Titoli con leetspeak (es: `M3M_FR4G:PR0J3CT_ECH0`), logline con operatori di sistema (`->`, `::`, `||`)
 - **Strategia Ibrida per Icone**: Bilanciamento intelligente tra simboli astratti e collegamenti letterali
 - **Responsive Design**: Ottimizzata per tutti i dispositivi
@@ -21,11 +24,13 @@ Una webapp futuristica con estetica Black Mirror e Love, Death & Robots che tras
 ## 🛠️ Tecnologie Utilizzate
 
 - **Framework**: Next.js 15.2.4 con App Router
-- **UI Library**: React 19, Tailwind CSS 4.1.12
-- **Componenti**: Radix UI, Lucide Icons
+- **UI Library**: React 19, Tailwind CSS 4.1.12  
+- **Componenti**: Radix UI, Lucide Icons (120+ icone)
 - **AI Integration**: OpenAI SDK (@ai-sdk/openai), Vercel AI SDK
-- **Validazione**: Zod schema validation
-- **Styling**: Tailwind CSS con animazioni personalizzate
+- **Validazione**: Zod schema validation per output strutturato
+- **Audio System**: Sistema audio personalizzato con Web Audio API
+- **Styling**: Tailwind CSS con animazioni personalizzate e keyframes avanzati
+- **TypeScript**: Tipizzazione completa per massima affidabilità
 
 ## 📦 Installazione
 
@@ -71,17 +76,21 @@ npm run dev
 
 ### Icone Supportate
 
-Il sistema supporta oltre 140 icone simboliche per massima espressività:
+Il sistema supporta oltre 120 icone simboliche completamente rinnovate per massima espressività narrativa:
 
-**Icone Tecnologiche**: satellite, cpu, database, wifi, terminal, bug, code, server, harddrive, binary, circuit, network, quantum, neural, matrix, bot, radio, rocket, smartphone, laptop, monitor, tablet, bluetooth, usb, storage, memory_stick
+**Icone Tecnologiche Avanzate**: satellite, cpu, database, wifi, terminal, bug, code, server, harddrive, binary, circuit, network, quantum, neural, matrix, bot, radio, rocket, smartphone, laptop, monitor, tablet, bluetooth, usb, storage, memory, microchip, cable, power, signal, antenna, scanner, printer, gamepad
 
-**Icone Simboliche**: ghost, heart, star, zap, shield, eye, skull, infinity, void, chaos, order, crosshair, bomb, target, focus, diamond, crystal, prism, vortex, nexus, eclipse, nebula
+**Icone Simboliche Potenziate**: ghost, heart, star, zap, shield, eye, skull, infinity, void, chaos, order, crosshair, bomb, target, focus, diamond, crystal, prism, vortex, nexus, eclipse, nebula, gem, crown, flame, mask, mirror
 
-**Icone Naturali**: tree, mountain, wave, lightning, butterfly, rose, anchor, feather, flower, leaf, water, storm, rainbow, sun, rain, snow, pine
+**Icone Naturali ed Elementi**: tree, mountain, wave, lightning, butterfly, rose, anchor, feather, flower, leaf, water, storm, rainbow, sun, rain, snow, pine, wind, fire, earth, air, snowflake, droplet, spark, lightning_bolt, tornado
 
-**Icone Umane**: compass, crown, flame, moon, sword, key, hourglass, mask, mirror, door, phoenix, dragon, wolf, raven, spider, serpent, labyrinth, users, user, people, baby, child
+**Icone Umane e Sociali**: compass, key, hourglass, door, phoenix, dragon, wolf, raven, spider, serpent, labyrinth, users, user, people, baby, child, family, couple, group, team, community, handshake, hug, kiss
 
-**Icone Astratte**: spiral, puzzle, layers, palette, music, image, sound, wind, clock, timer, globe, home, lock, settings, search, scan, help, info, warning, error, success
+**Icone Emotive e Psicologiche**: brain, mind, dream, memory, thought, emotion, mood, feeling, soul, spirit, consciousness, imagination, creativity, inspiration, wisdom, intelligence, logic, intuition
+
+**Icone Astratte ed Azioni**: spiral, puzzle, layers, palette, music, image, sound, clock, timer, globe, home, lock, settings, search, scan, help, info, warning, error, success, play, pause, stop, record, edit, create, destroy, transform, evolve
+
+**Icone per Storie Fantasy/Sci-Fi**: magic, spell, potion, wizard, knight, castle, spaceship, alien, robot, cyborg, portal, dimension, universe, galaxy, planet, meteor, comet, black_hole
 
 ## 🌐 Sistema Linguistico Avanzato
 
@@ -111,12 +120,13 @@ story-iconizer/
 │   ├── layout.tsx                # Layout dell'applicazione
 │   └── page.tsx                  # Pagina principale
 ├── components/
-│   ├── icon-reveal.tsx           # Componente per il reveal delle icone
-│   ├── icon-placeholder.tsx      # Placeholder per le icone
-│   ├── theme-provider.tsx        # Provider per i temi
-│   └── ui/                       # Componenti UI Radix
+│   ├── icon-reveal.tsx           # Componente per il reveal delle icone con effetti glitch potenziati
+│   ├── terminal-text.tsx         # Componente per animazioni typewriter realistiche
+│   ├── audio-control.tsx         # Controllo audio con sistema glitch indipendente
+│   └── ui/                       # Componenti UI Radix (Button, Textarea, etc.)
 ├── lib/
-│   └── utils.ts                  # Utilità comuni
+│   ├── utils.ts                  # Utilità comuni
+│   └── audio.ts                  # Sistema audio cyberpunk avanzato
 ├── public/                       # Asset statici
 ├── .env.local.example           # Template variabili d'ambiente
 └── README.md                    # Documentazione
@@ -150,28 +160,41 @@ Il design utilizza Tailwind CSS. I colori principali sono:
 
 ### Personalizzare gli Effetti Visivi
 
-#### Effetti Glitch del Titolo
-Definiti in `app/page.tsx` nella funzione `renderTitle()`. Personalizzabili:
-- Frequenza degli effetti (`Math.random() * 8000 + 3000`)
-- Intensità degli effetti
-- Tipi di effetti (flicker, color-shift, position-shift, static)
+#### Titolo FRAGMENT.OS
+Il titolo è stato semplificato per una migliore leggibilità, rimuovendo gli effetti glitch fastidiosi:
+```typescript
+const renderTitle = () => {
+  return (
+    <span className="text-gray-100 font-sans tracking-wide font-medium">
+      FRAGMENT.OS
+    </span>
+  )
+}
+```
 
-#### Effetti delle Icone
-Definiti in `components/icon-reveal.tsx` e `app/globals.css`:
-- **Idle Glitch**: Effetto casuale ogni 3 secondi sulle icone grigie
-- **Epic Lock**: Animazione drammatica al momento del lock (scale, brightness, text-shadow)
-- **Pulse Glitch**: Effetto durante l'analisi con colori RGB
+#### Sistema Glitch Indipendente Ottimizzato
+Definiti in `components/icon-reveal.tsx`, `components/audio-control.tsx` e `app/globals.css`:
+- **Placeholder Icons**: Glitch ogni 30-90 secondi (molto meno frequente)
+- **Locked Icons**: Glitch migliorato ogni 60-180 secondi con animazione `locked-icon-glitch`
+- **Extract Symbols Button**: Glitch indipendente ogni 90-180 secondi 
+- **Options Button**: Glitch rarissimo ogni 120-300 secondi
+- **Epic Lock**: Animazione drammatica potenziata al momento del reveal
+- **Pulse Glitch**: Effetto durante l'analisi con colori RGB sincronizzati
 
-#### Animazioni Typewriter
-Personalizzabili in `app/globals.css`:
-- `animate-typewriter`: Per i titoli (2s con delay 1s)
-- `animate-typewriter-delayed`: Per le logline (2s con delay 3s)
+#### Sistema Typewriter Realistico Avanzato
+Implementato in `components/terminal-text.tsx` con funzionalità avanzate:
+- **Velocità Variabile**: Caratteri normali (25-65ms), spazi veloci (15ms), punteggiatura lenta (120ms)
+- **Effetto Backspace**: 1% di probabilità di cancellare 2-3 caratteri e riscrivere (solo per logline)
+- **Suoni Sincronizzati**: Suoni typewriter realistici per ogni carattere visibile
+- **Cursore Anti-Jump**: Placeholder invisibile per evitare salti di layout
+- **Pause Realistiche**: Pause casuali occasionali per simulare pensiero umano
 
-#### Timing delle Sequenze
+#### Timing delle Sequenze Ottimizzato
 - Delay tra icone: 600ms (modificabile in `icon-reveal.tsx`)
-- Durata Epic Lock: 800ms
+- Durata Epic Lock potenziata: 800ms con effetti avanzati
 - Delay titolo: 2600ms dopo inizio analisi
-- Delay logline: 4100ms dopo inizio analisi
+- Delay logline: 500ms dopo completamento titolo (timing dinamico)
+- Sistema audio sincronizzato con tutte le animazioni
 
 ## 🚀 Deployment
 
@@ -255,6 +278,11 @@ Per migliorare le performance:
 
 ### Ottimizzazioni Specifiche Implementate
 
+- **Sistema Glitch Indipendente**: Ogni elemento ha il proprio timing per evitare sovrapposizioni
+- **Animazioni Realistiche**: Typewriter con velocità variabile e backspace casuali
+- **Audio System**: Suoni cyberpunk sincronizzati (scansione, typewriter, boot)
+- **Cursore Personalizzato**: Stile terminal su tutta l'interfaccia
+- **Background Migliorato**: Bande visive più visibili e spotlight mouse
 - **Mapping Intelligente**: Sistema automatico di fallback per icone non valide
 - **Rilevamento Lingua**: Algoritmo efficiente basato su word frequency
 - **Gestione Errori**: Fallback graceful con output tematicamente coerente
@@ -284,4 +312,18 @@ Per supporto o domande:
 
 ---
 
-**Story Iconizer** - Trasforma le tue storie in simboli universali con l'intelligenza artificiale 🚀
+## 🔄 Changelog Recenti
+
+### v2.1.0 - Ottimizzazioni UX e Performance
+- ✨ **Glitch Effects Ottimizzati**: Sistema completamente indipendente e meno invasivo
+- 🎵 **Sistema Audio Immersivo**: Suoni cyberpunk sincronizzati con animazioni
+- 🖱️ **Cursore Terminal**: Cursore personalizzato su tutta l'interfaccia
+- 📝 **Typewriter Realistico**: Velocità variabile e backspace casuali
+- 🎨 **Background Migliorato**: Bande visive più visibili e spotlight mouse
+- 🆔 **Titolo Semplificato**: Rimossi effetti glitch fastidiosi dal titolo
+- 🔧 **120+ Nuove Icone**: Vastissima collezione per analisi più accurate
+- 🐛 **Bug Fixes**: Risolto jumping del cursore e build errors
+
+---
+
+**Story Iconizer v2.1** - Trasforma le tue storie in simboli universali con l'intelligenza artificiale 🚀
