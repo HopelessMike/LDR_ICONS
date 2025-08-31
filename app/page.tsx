@@ -109,6 +109,18 @@ export default function StoryIconizer() {
     return cleanup;
   }, [])
 
+  // Restituisce sempre il path API corretto per ldr-icons:
+  // - su michelemiranda.com -> "/ldr-icons/api/analyze-story"
+  // - su ldr-icons.vercel.app -> "/api/analyze-story"
+  function getAnalyzeApiPath() {
+    if (typeof window === 'undefined') return '/api/analyze-story';
+    const here = window.location;
+    const onPortfolio = here.pathname === '/ldr-icons' || here.pathname.startsWith('/ldr-icons/');
+    const base = onPortfolio ? '/ldr-icons/' : '/';
+    // "./api/..." forza la risoluzione relativa alla "directory" corrente
+    return new URL('./api/analyze-story', `${here.origin}${base}`).toString();
+  }
+
   const handleAnalyze = async () => {
     if (!inputText.trim()) return
 
@@ -127,7 +139,7 @@ export default function StoryIconizer() {
     setShowLogline(false)
 
     try {
-      const response = await fetch("api/analyze-story", {
+      const response = await fetch(getAnalyzeApiPath(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inputText }),
