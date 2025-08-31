@@ -284,10 +284,10 @@ export default function StoryIconizer() {
               {result && showResult && (
                 <div className="space-y-4">
                   {showTitle && (
-                    <div className="flex justify-center">
+                    <div className="flex justify-center px-2">
                       <TerminalText
                         text={result.title}
-                        className={`text-lg sm:text-xl md:text-2xl font-mono tracking-wider mb-3 break-words max-w-full ${isErrorState ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)]' : 'text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]'}`}
+                        className={`font-mono tracking-wider mb-3 break-words max-w-full mobile-adaptive-title ${isErrorState ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.4)]' : 'text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]'}`}
                         delay={100}
                         onComplete={handleTitleComplete}
                         enableSound={true}

@@ -252,6 +252,32 @@ p, small, label, .helper-text, .table-cell, .chip--label {
   .word-wrap { word-wrap: break-word; overflow-wrap: break-word; hyphens: auto; }
   .mobile-icon-scroll { scrollbar-width: none; -ms-overflow-style: none; }
   .mobile-icon-scroll::-webkit-scrollbar { display: none; }
+  .mobile-adaptive-title {
+    font-size: clamp(0.75rem, 4vw, 2rem);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  @media (max-width: 640px) {
+    .mobile-adaptive-title {
+      font-size: clamp(0.875rem, 3.5vw, 1.25rem);
+      white-space: normal;
+      word-break: break-word;
+      hyphens: auto;
+      line-height: 1.3;
+    }
+  }
+  @media (max-width: 480px) {
+    .mobile-adaptive-title {
+      font-size: clamp(0.75rem, 3.2vw, 1rem);
+    }
+  }
+  @media (max-width: 320px) {
+    .mobile-adaptive-title {
+      font-size: clamp(0.65rem, 2.8vw, 0.875rem);
+    }
+  }
   .static-overlay {
     position: absolute; inset: 0; width: 100%; height: 100%;
     overflow: hidden; pointer-events: none;
