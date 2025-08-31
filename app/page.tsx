@@ -127,7 +127,7 @@ export default function StoryIconizer() {
     setShowLogline(false)
 
     try {
-      const response = await fetch("/api/analyze-story", {
+      const response = await fetch("api/analyze-story", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inputText }),
