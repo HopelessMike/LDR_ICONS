@@ -1,20 +1,19 @@
-// next.config.mjs  — progetto ldr-icons
+// next.config.mjs — progetto ldr-icons
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: { unoptimized: true },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-
-  async rewrites() {
-    return [
-      // monta la home dell'app su /ldr-icons
-      { source: '/ldr-icons', destination: '/' },
-
-      // e mappa tutte le sottopagine su percorsi equivalenti interni
-      { source: '/ldr-icons/:path*', destination: '/:path*' },
-    ];
-  },
+  
+  // CONFIGURAZIONE CHIAVE PER MICROFRONTEND
+  basePath: '/ldr-icons',
+  
+  // Opzionale: se hai ancora problemi con gli asset statici, aggiungi:
+  // assetPrefix: '/ldr-icons',
+  
+  // RIMUOVI i rewrites - non servono quando usi basePath
+  // I rewrites che avevi configurato sono inutili e possono creare conflitti
 };
 
 export default nextConfig;
