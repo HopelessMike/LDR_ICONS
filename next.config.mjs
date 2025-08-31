@@ -1,19 +1,24 @@
-// next.config.mjs — progetto ldr-icons
+// next.config.mjs — ldr-icons (micro app)
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: { unoptimized: true },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  
-  // CONFIGURAZIONE CHIAVE PER MICROFRONTEND
-  basePath: '/ldr-icons',
-  
-  // Opzionale: se hai ancora problemi con gli asset statici, aggiungi:
-  // assetPrefix: '/ldr-icons',
-  
-  // RIMUOVI i rewrites - non servono quando usi basePath
-  // I rewrites che avevi configurato sono inutili e possono creare conflitti
+
+  // (Opzionale ma consigliato) Prefissa gli asset JS/CSS quando l'app vive sotto /ldr-icons
+  // Next applicherà questo prefisso ai file sotto /_next/static
+  // https://nextjs.org/docs/app/api-reference/config/next-config-js/assetPrefix
+  assetPrefix: '/ldr-icons',
+
+  // Rewrites per gestire il montaggio sotto /ldr-icons sia
+  // quando l'app è raggiunta via portfolio sia quando la visiti direttamente
+  async rewrites() {
+    return [
+      { source: '/ldr-icons', destination: '/' },
+      { source: '/ldr-icons/:path*', destination: '/:path*' },
+    ];
+  },
 };
 
 export default nextConfig;
