@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "v0-website-portfolio": {
+      "development": {
+        "fallback": "https://v0-website-portfolio.vercel.app"
+      }
+    },
+    "v0-insight-suite": {
+      "routing": [
+        {
+          "group": "insightsuite",
+          "paths": ["/InsightSuite", "/InsightSuite/:path*"]
+        }
+      ]
+    },
+    "ldr-icons": {
+      "routing": [
+        {
+          "group": "ldr-icons",
+          "paths": ["/ldr-icons", "/ldr-icons/:path*"]
+        }
+      ]
+    }
+  }
+}

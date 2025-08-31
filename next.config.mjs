@@ -1,4 +1,4 @@
-// next.config.mjs (PORTFOLIO)
+// next.config.mjs (LDR)
 import { withMicrofrontends } from '@vercel/microfrontends/next/config';
 
 /** @type {import('next').NextConfig} */
@@ -10,3 +10,4 @@ const nextConfig = {
 };
 
 export default withMicrofrontends(nextConfig);
+
