@@ -8,6 +8,7 @@ import { IconReveal } from "@/components/icon-reveal"
 import { TerminalText } from "@/components/terminal-text"
 import { audioSystem } from "@/lib/audio"
 import { AudioControl } from "@/components/audio-control"
+import LoadingScreen from "@/components/LoadingScreen"
 
 interface AnalysisResult {
   title: string
@@ -18,14 +19,11 @@ interface AnalysisResult {
   }>
 }
 
-// GlitchEffect interface removed
-
 export default function StoryIconizer() {
   const [inputText, setInputText] = useState("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [showResult, setShowResult] = useState(false)
-  // Removed title glitch effects as requested
   const [error, setError] = useState<string | null>(null)
   const [isErrorState, setIsErrorState] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -35,6 +33,10 @@ export default function StoryIconizer() {
   const [showLogline, setShowLogline] = useState(false);
   const [buttonGlitchActive, setButtonGlitchActive] = useState(false);
   const [optionsGlitchActive, setOptionsGlitchActive] = useState(false);
+  
+  // Loading screen states
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
   // Effect for initial mount animation
   useEffect(() => {
@@ -54,12 +56,9 @@ export default function StoryIconizer() {
     };
   }, []);
 
-
-  // Title glitch effects removed as requested
-
   // Independent glitch system for Extract Symbols button
   useEffect(() => {
-    if (!isAnalyzing) {
+    if (!isAnalyzing && initialLoadComplete) {
       const scheduleButtonGlitch = () => {
         // Random delay between 10-20 seconds for button (more frequent but controlled)
         const delay = 10000 + Math.random() * 10000;
@@ -82,32 +81,42 @@ export default function StoryIconizer() {
       const cleanup = scheduleButtonGlitch();
       return cleanup;
     }
-  }, [isAnalyzing])
+  }, [isAnalyzing, initialLoadComplete])
 
   // Independent glitch system for Options button (settings)
   useEffect(() => {
-    const scheduleOptionsGlitch = () => {
-      // Random delay between 12-25 seconds for options (more frequent but still independent)
-      const delay = 12000 + Math.random() * 13000;
-      
-      const timeoutId = setTimeout(() => {
-        setOptionsGlitchActive(true);
+    if (initialLoadComplete) {
+      const scheduleOptionsGlitch = () => {
+        // Random delay between 12-25 seconds for options (more frequent but still independent)
+        const delay = 12000 + Math.random() * 13000;
         
-        // Options glitch lasts 250ms
-        setTimeout(() => {
-          setOptionsGlitchActive(false);
-        }, 250);
+        const timeoutId = setTimeout(() => {
+          setOptionsGlitchActive(true);
+          
+          // Options glitch lasts 250ms
+          setTimeout(() => {
+            setOptionsGlitchActive(false);
+          }, 250);
+          
+          // Schedule next glitch
+          scheduleOptionsGlitch();
+        }, delay);
         
-        // Schedule next glitch
-        scheduleOptionsGlitch();
-      }, delay);
+        return () => clearTimeout(timeoutId);
+      };
       
-      return () => clearTimeout(timeoutId);
-    };
-    
-    const cleanup = scheduleOptionsGlitch();
-    return cleanup;
-  }, [])
+      const cleanup = scheduleOptionsGlitch();
+      return cleanup;
+    }
+  }, [initialLoadComplete])
+
+  // Handle loading screen completion
+  const handleLoadingComplete = useCallback(() => {
+    setShowLoadingScreen(false);
+    setInitialLoadComplete(true);
+    // Scroll to top after loading
+    window.scrollTo(0, 0);
+  }, []);
 
   // Restituisce sempre il path API corretto per ldr-icons:
   // - su michelemiranda.com -> "/ldr-icons/api/analyze-story"
@@ -209,6 +218,16 @@ export default function StoryIconizer() {
     setTimeout(() => setShowLogline(true), 500)
   }, []);
 
+  // Show loading screen during initial load
+  if (showLoadingScreen || !initialLoadComplete) {
+    return (
+      <LoadingScreen
+        progress={100}
+        isVisible={true}
+        onLoadingComplete={handleLoadingComplete}
+      />
+    );
+  }
 
   return (
     <div 
@@ -266,7 +285,6 @@ export default function StoryIconizer() {
                 <div className="right" />
               </button>
             </div>
-
 
             {error && (
               <div className="text-center">

@@ -4,7 +4,10 @@ const nextConfig = {
   images: { unoptimized: true },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-
+  experimental: {
+    // Disabilita il tracing che causa il file bloccato
+    instrumentationHook: false
+  },
   // per servire correttamente JS/CSS quando il child vive sotto /ldr-icons
   assetPrefix: '/ldr-icons', // opzionale ma consigliato (/_next/*)
   async rewrites() {
