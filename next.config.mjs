@@ -1,3 +1,6 @@
+// next.config.mjs
+import { withMicrofrontends } from '@vercel/microfrontends/next/config';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -5,11 +8,10 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {
-    // Disabilita il tracing che causa il file bloccato
     instrumentationHook: false
   },
-  // per servire correttamente JS/CSS quando il child vive sotto /ldr-icons
-  assetPrefix: '/ldr-icons', // opzionale ma consigliato (/_next/*)
+  
+  // Rewrites per gestire il mounting path
   async rewrites() {
     return [
       { source: '/ldr-icons', destination: '/' },
@@ -17,4 +19,6 @@ const nextConfig = {
     ];
   },
 };
-export default nextConfig;
+
+// IMPORTANTE: Usa withMicrofrontends invece di export default
+export default withMicrofrontends(nextConfig);

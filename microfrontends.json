@@ -15,12 +15,18 @@
       ]
     },
     "ldr-icons": {
+      "packageName": "ldr-icons",
       "routing": [
         {
-          "group": "ldr-icons",
-          "paths": ["/ldr-icons", "/ldr-icons/:path*"]
+          "paths": [
+            "/ldr-icons",
+            "/ldr-icons/:path*"
+          ]
         }
-      ]
+      ],
+      "development": {
+        "fallback": "https://ldr-icons.vercel.app"
+      }
     }
   }
 }

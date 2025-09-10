@@ -3,29 +3,7 @@
 import { useEffect, useState, useMemo } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-
-// Funzione per ottenere il path corretto per le immagini statiche
-const getImagePath = (imagePath: string): string => {
-  // Verifica se siamo in un ambiente microfrontend
-  if (typeof window !== 'undefined') {
-    // Controlla se l'URL corrente contiene il prefisso del microfrontend
-    const currentPath = window.location.pathname
-    const isMicrofrontend = currentPath.includes('/ldr-icons') || 
-                           window.location.hostname.includes('ldr-icons') ||
-                           document.querySelector('meta[name="microfrontend-prefix"]')?.getAttribute('content')
-    
-    if (isMicrofrontend && !imagePath.startsWith('/ldr-icons')) {
-      return `/ldr-icons${imagePath}`
-    }
-  }
-  
-  // Fallback per il server-side rendering: usa il prefisso se definito nell'ambiente
-  if (typeof window === 'undefined' && process.env.NEXT_PUBLIC_ASSET_PREFIX) {
-    return `${process.env.NEXT_PUBLIC_ASSET_PREFIX}${imagePath}`
-  }
-  
-  return imagePath
-}
+import { withAssetPath } from "@/lib/basePath"
 
 // Animazioni particelle
 const particleVariants = {
@@ -252,7 +230,7 @@ export default function LoadingScreen({
               <div className="relative w-40 h-40 md:w-44 md:h-44 rounded-full overflow-hidden bg-black">
                 <div className="w-full h-full rounded-full overflow-hidden flex items-center justify-center">
                   <Image
-                    src={getImagePath("/fragment-avatar.png")}
+                    src={withAssetPath("/fragment-avatar.png")}
                     alt="FRAGMENT.OS"
                     width={176}
                     height={176}
