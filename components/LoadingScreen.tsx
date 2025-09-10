@@ -21,13 +21,13 @@ const particleVariants = {
 };
 
 interface LoadingScreenProps {
-  progress: number
+  progress?: number // Made optional with default handling
   isVisible: boolean
   onLoadingComplete?: () => void
 }
 
 export default function LoadingScreen({
-  progress,
+  progress: externalProgress, // Renamed to avoid confusion
   isVisible,
   onLoadingComplete = () => {},
 }: LoadingScreenProps) {
@@ -36,6 +36,7 @@ export default function LoadingScreen({
   const [currentTextIndex, setCurrentTextIndex] = useState(0)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isTouch, setIsTouch] = useState(false)
+  const [hasCompleted, setHasCompleted] = useState(false) // Prevent double completion
 
   const loadingTexts = [
     "Inizializzando sistema FRAGMENT.OS...",
@@ -62,7 +63,7 @@ export default function LoadingScreen({
   }, [isTouch])
 
   useEffect(() => {
-    if (isVisible) {
+    if (isVisible && !hasCompleted) {
       setShowScreen(true)
       setDisplayProgress(0)
       setCurrentTextIndex(0)
@@ -76,6 +77,7 @@ export default function LoadingScreen({
           const next = Math.min(prev + increment, 100)
           if (next >= 100) {
             clearInterval(progressTimer)
+            setHasCompleted(true) // Mark as completed
             setTimeout(() => {
               setShowScreen(false)
               onLoadingComplete()
@@ -101,7 +103,7 @@ export default function LoadingScreen({
         clearInterval(textTimer)
       }
     }
-  }, [isVisible, onLoadingComplete, loadingTexts.length])
+  }, [isVisible, onLoadingComplete, loadingTexts.length, hasCompleted])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -229,8 +231,8 @@ export default function LoadingScreen({
                   <Image
                     src="/fragment-avatar.png"
                     alt="FRAGMENT.OS"
-                    width={130}
-                    height={130}
+                    width={176}
+                    height={176}
                     className="w-full h-full object-cover"
                     priority
                     onError={(e) => {

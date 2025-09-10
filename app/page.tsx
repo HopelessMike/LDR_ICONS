@@ -34,14 +34,18 @@ export default function StoryIconizer() {
   const [buttonGlitchActive, setButtonGlitchActive] = useState(false);
   const [optionsGlitchActive, setOptionsGlitchActive] = useState(false);
   
-  // Loading screen states
-  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  // Simplified loading screen state - only one state needed
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Effect for initial mount animation
+  // Effect for initial mount animation (after loading completes)
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
+    if (!isLoading) {
+      // Small delay to ensure smooth transition
+      setTimeout(() => {
+        setIsMounted(true);
+      }, 100);
+    }
+  }, [isLoading]);
 
   // Effect for mouse position tracking (spotlight effect)
   useEffect(() => {
@@ -58,7 +62,7 @@ export default function StoryIconizer() {
 
   // Independent glitch system for Extract Symbols button
   useEffect(() => {
-    if (!isAnalyzing && initialLoadComplete) {
+    if (!isAnalyzing && !isLoading) {
       const scheduleButtonGlitch = () => {
         // Random delay between 10-20 seconds for button (more frequent but controlled)
         const delay = 10000 + Math.random() * 10000;
@@ -81,11 +85,11 @@ export default function StoryIconizer() {
       const cleanup = scheduleButtonGlitch();
       return cleanup;
     }
-  }, [isAnalyzing, initialLoadComplete])
+  }, [isAnalyzing, isLoading])
 
   // Independent glitch system for Options button (settings)
   useEffect(() => {
-    if (initialLoadComplete) {
+    if (!isLoading) {
       const scheduleOptionsGlitch = () => {
         // Random delay between 12-25 seconds for options (more frequent but still independent)
         const delay = 12000 + Math.random() * 13000;
@@ -108,12 +112,11 @@ export default function StoryIconizer() {
       const cleanup = scheduleOptionsGlitch();
       return cleanup;
     }
-  }, [initialLoadComplete])
+  }, [isLoading])
 
   // Handle loading screen completion
   const handleLoadingComplete = useCallback(() => {
-    setShowLoadingScreen(false);
-    setInitialLoadComplete(true);
+    setIsLoading(false);
     // Scroll to top after loading
     window.scrollTo(0, 0);
   }, []);
@@ -219,10 +222,10 @@ export default function StoryIconizer() {
   }, []);
 
   // Show loading screen during initial load
-  if (showLoadingScreen || !initialLoadComplete) {
+  if (isLoading) {
     return (
       <LoadingScreen
-        progress={100}
+        progress={0} // LoadingScreen gestisce internamente il progress
         isVisible={true}
         onLoadingComplete={handleLoadingComplete}
       />
