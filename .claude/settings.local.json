@@ -9,7 +9,10 @@
       "Bash(npm run build:*)",
       "Bash(timeout 10 npm run build:*)",
       "Bash(timeout 15 npm run dev)",
-      "Bash(npm run start:*)"
+      "Bash(npm run start:*)",
+      "WebSearch",
+      "Bash(timeout 10 npm run dev)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

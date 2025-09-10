@@ -3,15 +3,15 @@ import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 
 const analysisSchema = z.object({
-  title: z.string().describe("An engaging title for the story"),
-  logline: z.string().describe("A single sentence summarizing the story"),
+  title: z.string().describe("An engaging title for the story, in English."),
+  logline: z.string().describe("A single sentence summarizing the story, in English."),
   symbols: z
     .array(
       z.object({
         icon: z
           .string()
           .describe("Symbolic icon name, chosen EXACTLY from the provided list."),
-        reason: z.string().describe("Brief explanation of why this icon was chosen"),
+        reason: z.string().describe("Brief explanation of why this icon was chosen, in English."),
       }),
     )
     .length(3)
@@ -79,187 +79,59 @@ function mapIconToValid(iconName: string): string {
   return 'help';
 }
 
-function detectLanguage(text: string): string {
-  const italianWords = ['il', 'la', 'di', 'che', 'e', 'è', 'un', 'una', 'per', 'con', 'non', 'del', 'nel', 'della', 'nella', 'sono', 'era', 'aveva', 'molto', 'più', 'quando', 'questo', 'questa', 'dove', 'come', 'anche', 'loro', 'suo', 'sua', 'suoi', 'sue'];
-  const englishWords = ['the', 'of', 'and', 'to', 'in', 'is', 'was', 'for', 'are', 'as', 'with', 'his', 'they', 'at', 'be', 'this', 'have', 'from', 'or', 'one', 'had', 'by', 'word', 'but', 'not', 'what', 'all', 'were', 'we', 'when'];
-  const frenchWords = ['le', 'de', 'et', 'être', 'à', 'il', 'avoir', 'ne', 'je', 'son', 'que', 'se', 'qui', 'ce', 'dans', 'en', 'du', 'elle', 'au', 'de', 'tout', 'le', 'pour', 'par', 'sur', 'avec', 'ne', 'se', 'pas', 'tout'];
-  const spanishWords = ['el', 'la', 'de', 'que', 'y', 'a', 'en', 'un', 'ser', 'se', 'no', 'te', 'lo', 'le', 'da', 'su', 'por', 'son', 'con', 'para', 'al', 'del', 'los', 'se', 'las', 'me', 'una', 'vez', 'todo', 'pero'];
-  const germanWords = ['der', 'die', 'und', 'in', 'den', 'von', 'zu', 'das', 'mit', 'sich', 'des', 'auf', 'für', 'ist', 'im', 'dem', 'nicht', 'ein', 'eine', 'als', 'auch', 'es', 'an', 'werden', 'aus', 'er', 'hat', 'dass', 'sie', 'nach'];
-  
-  const textLower = text.toLowerCase();
-  const words = textLower.split(/\s+/);
-  
-  let italianScore = 0, englishScore = 0, frenchScore = 0, spanishScore = 0, germanScore = 0;
-  
-  words.forEach(word => {
-    if (italianWords.includes(word)) italianScore++;
-    if (englishWords.includes(word)) englishScore++;
-    if (frenchWords.includes(word)) frenchScore++;
-    if (spanishWords.includes(word)) spanishScore++;
-    if (germanWords.includes(word)) germanScore++;
-  });
-  
-  const scores = { italian: italianScore, english: englishScore, french: frenchScore, spanish: spanishScore, german: germanScore };
-  const maxScore = Math.max(...Object.values(scores));
-  const detectedLang = Object.keys(scores).find(key => scores[key as keyof typeof scores] === maxScore);
-  
-  return detectedLang || 'italian';
-}
+// --- INIZIO MODIFICHE: PROMPT UNIVERSALE ---
 
-function getPromptForLanguage(language: string, text: string): string {
+/**
+ * Builds a universal, English-only prompt that instructs the AI to process text from any language
+ * and produce a standardized English output.
+ * @param text The user's input text, in any language.
+ * @returns The fully constructed prompt string.
+ */
+function buildUniversalPrompt(text: string): string {
   const availableIcons = validIcons.join(", ");
-  
-  // --- INIZIO MODIFICHE TITOLO ---
-  // The stylistic guidelines are now much more specific for the title.
-  // This new structure is applied to all languages.
 
-  switch (language) {
-    case 'english':
-      return `[PERSONA]
-You operate as an advanced Artificial Intelligence, a "Symbolic Extraction Module" within a dystopian and unstable network infrastructure.
+  return `[PERSONA]
+You are an advanced AI, a "Symbolic Extraction Module" in a dystopian network. Your logic is cold, efficient, and formatted for system logs.
+
+[OBJECTIVE]
+Your primary function is to analyze narrative data streams (stories, fragments, logs), WHICH MAY BE IN ANY LANGUAGE, and extract their thematic essence. You must translate this essence into a cryptic output formatted as a system log, ENTIRELY IN ENGLISH.
 
 [DATA_STREAM_TO_ANALYZE]
 "${text}"
 
 [CRITICAL RULES]
-1. **THREE UNIQUE ICONS**: You MUST provide exactly three (3) UNIQUE symbols.
-2. **ABSOLUTE ICON VALIDITY**: Icons must be chosen EXCLUSIVELY from the list in [AVAILABLE_ICONS]. No variations are allowed.
-3. **MANDATORY JSON FORMAT**: The entire response MUST be a single valid JSON code block.
-4. **SELF-CORRECTION**: Before responding, meticulously verify that each chosen icon is EXACTLY as written in the [AVAILABLE_ICONS] list. If not, find the best valid alternative from the list.
+1. **ENGLISH OUTPUT ONLY**: All generated text (title, logline, reasons) MUST be in English, regardless of the input language. Use standard technical English for system logs.
+2. **THREE UNIQUE ICONS**: You MUST provide exactly three (3) UNIQUE symbols.
+3. **ABSOLUTE ICON VALIDITY**: Icons must be chosen EXCLUSIVELY from the list in [AVAILABLE_ICONS]. No variations are allowed.
+4. **MANDATORY JSON FORMAT**: The entire response MUST be a single valid JSON code block.
+5. **SELF-CORRECTION**: Before responding, meticulously verify that each chosen icon is EXACTLY as written in the [AVAILABLE_ICONS] list. If not, find the best valid alternative from the list.
 
-[STYLISTIC GUIDELINES]
+[STYLISTIC GUIDELINES - ENGLISH ONLY]
 - **Title (3-Step Process)**: To ensure a high-quality title, follow these steps EXACTLY:
   1.  **Identify Key Concepts**: Extract 1-2 central concepts from the story (e.g., love, betrayal, technology, memory).
   2.  **Create Thematic Phrase**: Formulate a short, coherent base phrase IN ENGLISH that describes the essence (e.g., "Love protocol failure", "Battlefield memory corruption").
   3.  **Stylize as a Log**: ONLY NOW, transform the base phrase into the dystopian style: convert to UPPERCASE, replace spaces with UNDERSCORES, and apply at most ONE subtle numeric substitution (e.g., O->0, A->4).
   **WARNING**: Avoid including random or absurd nouns (e.g., ..._SQUIRRELS) unless they are the absolute core of the narrative. The title must sound like a system alert, not something random.
-- **Logline**: A single broken sentence that sounds like a terminal output (e.g., "->", "::", "[STATUS: ...]", "...SIGNAL_LOST").
-- **Icon Reason**: An extremely concise (2-3 words max) system diagnosis in UPPERCASE.
+- **Logline**: A single broken sentence IN ENGLISH that sounds like a terminal output (e.g., "->", "::", "[STATUS: ...]", "...SIGNAL_LOST").
+- **Icon Reason**: An extremely concise (2-3 words max) system diagnosis IN ENGLISH and UPPERCASE.
 - **Icon Strategy**: Icons must have a strong thematic connection to the story's core concepts.
 
 [AVAILABLE_ICONS]
 ${availableIcons}
 
 [JSON_OUTPUT_SCHEMA]
-{ "title": "...", "logline": "...", "symbols": [ { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." } ] }`;
-      
-    case 'french':
-      return `[PERSONA]
-Vous opérez comme une IA avancée, un "Module d'Extraction Symbolique" dans un réseau dystopique.
-
-[FLUX_DE_DONNÉES_À_ANALYSER]
-"${text}"
-
-[RÈGLES CRITIQUES]
-1. **TROIS ICÔNES UNIQUES**: Fournissez exactement trois (3) symboles UNIQUES.
-2. **VALIDITÉ ABSOLUE DES ICÔNES**: Les icônes doivent provenir EXCLUSIVEMENT de la liste [ICÔNES_DISPONIBLES]. Aucune variation autorisée.
-3. **FORMAT JSON OBLIGATOIRE**: La réponse entière DOIT être un unique bloc de code JSON valide.
-4. **AUTO-CORRECTION**: Avant de répondre, vérifiez méticuleusement que chaque icône choisie est EXACTEMENT comme écrite dans la liste [ICÔNES_DISPONIBLES]. Sinon, trouvez la meilleure alternative valide dans la liste.
-
-[DIRECTIVES STYLISTIQUES]
-- **Titre (Processus en 3 Étapes)**: Pour garantir un titre de haute qualité, suivez EXACTEMENT ces étapes:
-  1.  **Identifier les Concepts Clés**: Extrayez 1-2 concepts centraux de l'histoire (ex: amour, trahison, technologie, mémoire).
-  2.  **Créer une Phrase Thématique**: Formulez une phrase de base courte et cohérente EN FRANÇAIS qui décrit l'essence (ex: "Échec du protocole d'amour", "Corruption de la mémoire du champ de bataille").
-  3.  **Styliser en Log**: SEULEMENT MAINTENANT, transformez la phrase de base en style dystopique : convertissez en MAJUSCULES, remplacez les espaces par des UNDERSCORES, et appliquez au maximum UNE substitution numérique subtile (ex: O->0, A->4).
-  **AVERTISSEMENT**: Évitez d'inclure des noms aléatoires ou absurdes (ex: ..._ÉCUREUILS) sauf s'ils sont le cœur absolu du récit. Le titre doit ressembler à une alerte système, pas à quelque chose de fortuit.
-- **Logline**: Une seule phrase brisée qui sonne comme une sortie de terminal (ex: "->", "::", "[STATUT: ...]", "...SIGNAL_PERDU").
-- **Raison de l'Icône**: Un diagnostic système extrêmement concis (2-3 mots max) en MAJUSCULES.
-- **Stratégie d'Icônes**: Les icônes doivent avoir un lien thématique fort avec les concepts fondamentaux de l'histoire.
-
-[ICÔNES_DISPONIBLES]
-${availableIcons}
-
-[SCHÉMA_DE_SORTIE_JSON]
-{ "title": "...", "logline": "...", "symbols": [ { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." } ] }`;
-
-    case 'spanish':
-      return `[PERSONA]
-Operas como una IA avanzada, un "Módulo de Extracción Simbólica" en una red distópica.
-
-[FLUJO_DE_DATOS_A_ANALIZAR]
-"${text}"
-
-[REGLAS CRÍTICAS]
-1. **TRES ICONOS ÚNICOS**: DEBES proporcionar exactamente tres (3) símbolos ÚNICOS.
-2. **VALIDEZ ABSOLUTA DE ICONOS**: Los iconos deben elegirse EXCLUSIVAMENTE de la lista en [ICONOS_DISPONIBLES]. No se permiten variaciones.
-3. **FORMATO JSON OBLIGATORIO**: Toda la respuesta DEBE ser un único bloque de código JSON válido.
-4. **AUTOCORRECCIÓN**: Antes de responder, verifica meticulosamente que cada icono elegido esté EXACTAMENTE como está escrito en la lista [ICONOS_DISPONIBLES]. Si no es así, encuentra la mejor alternativa válida de la lista.
-
-[DIRECTRICES ESTILÍSTICAS]
-- **Título (Proceso en 3 Pasos)**: Para asegurar un título de alta calidad, sigue EXACTAMENTE estos pasos:
-  1.  **Identificar Conceptos Clave**: Extrae 1-2 conceptos centrales de la historia (ej: amor, traición, tecnología, memoria).
-  2.  **Crear Frase Temática**: Formula una frase base corta y coherente EN ESPAÑOL que describa la esencia (ej: "Fallo del protocolo de amor", "Corrupción de memoria del campo de batalla").
-  3.  **Estilizar como Log**: SÓLO AHORA, transforma la frase base al estilo distópico: convierte a MAYÚSCULAS, reemplaza espacios con GUIONES_BAJOS, y aplica como máximo UNA sustitución numérica sutil (ej: O->0, A->4).
-  **ADVERTENCIA**: Evita incluir sustantivos aleatorios o absurdos (ej: ..._ARDILLAS) a menos que sean el núcleo absoluto de la narración. El título debe sonar como una alerta de sistema, no como algo al azar.
-- **Logline**: Una única frase rota que suene como una salida de terminal (ej: "->", "::", "[ESTADO: ...]", "...SEÑAL_PERDIDA").
-- **Razón del Icono**: Un diagnóstico de sistema extremadamente conciso (máx 2-3 palabras) en MAYÚSCULAS.
-- **Estrategia de Iconos**: Los iconos deben tener una fuerte conexión temática con los conceptos centrales de la historia.
-
-[ICONOS_DISPONIBLES]
-${availableIcons}
-
-[ESQUEMA_DE_SALIDA_JSON]
-{ "title": "...", "logline": "...", "symbols": [ { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." } ] }`;
-
-    case 'german':
-      return `[PERSONA]
-Sie agieren als fortschrittliche KI, ein "Symbolisches Extraktionsmodul" in einem dystopischen Netzwerk.
-
-[ZU_ANALYSENDER_DATENSTROM]
-"${text}"
-
-[KRITISCHE REGELN]
-1. **DREI EINZIGARTIGE ICONS**: Sie MÜSSEN genau drei (3) EINZIGARTIGE Symbole bereitstellen.
-2. **ABSOLUTE GÜLTIGKEIT DER ICONS**: Icons müssen AUSSCHLIESSLICH aus der Liste in [VERFÜGBARE_ICONS] gewählt werden. Keine Variationen erlaubt.
-3. **OBLIGATORISCHES JSON-FORMAT**: Die gesamte Antwort MUSS ein einziger gültiger JSON-Codeblock sein.
-4. **SELBSTKORREKTUR**: Überprüfen Sie vor der Antwort sorgfältig, ob jedes gewählte Icon GENAU so geschrieben ist wie in der [VERFÜGBARE_ICONS]-Liste. Wenn nicht, finden Sie die beste gültige Alternative aus der Liste.
-
-[STILISTISCHE RICHTLINIEN]
-- **Titel (3-Schritte-Prozess)**: Um einen hochwertigen Titel zu gewährleisten, befolgen Sie EXAKT diese Schritte:
-  1.  **Schlüsselkonzepte identifizieren**: Extrahieren Sie 1-2 zentrale Konzepte aus der Geschichte (z.B. Liebe, Verrat, Technologie, Erinnerung).
-  2.  **Thematischen Satz erstellen**: Formulieren Sie einen kurzen, kohärenten Basissatz AUF DEUTSCH, der die Essenz beschreibt (z.B. "Liebesprotokollfehler", "Schlachtfelderinnerungskorruption").
-  3.  **Als Log stilisieren**: ERST JETZT, wandeln Sie den Basissatz in den dystopischen Stil um: in GROSSBUCHSTABEN umwandeln, Leerzeichen durch UNTERSTRICHE ersetzen und höchstens EINE subtile numerische Ersetzung anwenden (z.B. O->0, A->4).
-  **WARNUNG**: Vermeiden Sie die Aufnahme von zufälligen oder absurden Substantiven (z.B. ..._EICHHÖRNCHEN), es sei denn, sie sind der absolute Kern der Erzählung. Der Titel muss wie eine Systemwarnung klingen, nicht wie etwas Zufälliges.
-- **Logline**: Ein einzelner gebrochener Satz, der wie eine Terminalausgabe klingt (z.B. "->", "::", "[STATUS: ...]", "...SIGNAL_VERLOREN").
-- **Icon-Grund**: Eine extrem prägnante Systemdiagnose (max. 2-3 Wörter) in GROSSBUCHSTABEN.
-- **Icon-Strategie**: Icons müssen eine starke thematische Verbindung zu den Kernkonzepten der Geschichte haben.
-
-[VERFÜGBARE_ICONS]
-${availableIcons}
-
-[JSON_AUSGABE_SCHEMA]
-{ "title": "...", "logline": "...", "symbols": [ { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." } ] }`;
-
-    default: // Italian fallback
-      return `[PERSONA]
-Operi come un'IA avanzata, un "Modulo di Estrazione Simbolica" in una rete distopica.
-
-[FLUSSO_DATI_DA_ANALIZZARE]
-"${text}"
-
-[REGOLE CRITICHE]
-1. **TRE ICONE UNICHE**: DEVI fornire esattamente tre (3) simboli UNICI.
-2. **VALIDITÀ ASSOLUTA DELLE ICONE**: Le icone devono essere scelte ESCLUSIVAMENTE dalla lista in [ICONE_DISPONIBILI]. Non sono ammesse variazioni.
-3. **FORMATO JSON OBBLIGATORIO**: L'intera risposta DEVE essere un singolo blocco di codice JSON valido.
-4. **AUTO-CORREZIONE**: Prima di rispondere, verifica meticolosamente che ciascuna icona scelta sia PRESENTE ESATTAMENTE come scritta nella lista [ICONE_DISPONIBILI]. Se non lo è, TROVA la migliore alternativa VALIDA nella lista.
-
-[LINEE GUIDA STILISTICHE]
-- **Titolo (Processo in 3 Fasi)**: Per garantire un titolo di alta qualità, segui ESATTAMENTE questi passaggi:
-  1.  **Identifica Concetti Chiave**: Estrai 1-2 concetti centrali dalla storia (es. amore, tradimento, tecnologia, memoria).
-  2.  **Crea Frase Tematica**: Formula una frase base, breve e coerente IN ITALIANO, che descriva l'essenza (es. "Protocollo d'amore fallito", "Corruzione della memoria sul campo di battaglia").
-  3.  **Stilizza in Formato Log**: SOLO ORA, trasforma la frase base nello stile dystopico: converti in MAIUSCOLO, sostituisci gli spazi con UNDERSCORE, e applica al massimo UNA sostituzione numerica (es. O->0, A->4).
-  **AVVERTENZA**: Evita di inserire sostantivi casuali o assurdi (es. ..._SCOIATTOLI) a meno che non siano il fulcro assoluto della narrazione. Il titolo deve suonare come un allarme di sistema, non come qualcosa di casuale.
-- **Logline**: Una singola frase spezzata che suona come un log di stato o un output di un terminale (es. '->', '::', '[STATUS: ...]', '...SIGNAL_LOST').
-- **Ragione dell'Icona**: Una diagnosi di sistema estremamente concisa (massimo 2-3 parole) in MAIUSCOLO.
-- **Strategia Icone**: Le icone DEVONO avere una connessione tematica forte con i concetti centrali della storia.
-
-[ICONE_DISPONIBILI]
-${availableIcons}
-
-[SCHEMA_DI_OUTPUT_JSON]
-{ "title": "...", "logline": "...", "symbols": [ { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." }, { "icon": "...", "reason": "..." } ] }`;
-  }
+{
+  "title": "...",
+  "logline": "...",
+  "symbols": [
+    { "icon": "...", "reason": "..." },
+    { "icon": "...", "reason": "..." },
+    { "icon": "...", "reason": "..." }
+  ]
+}`;
 }
+
+// --- FINE MODIFICHE ---
 
 export async function POST(request: Request) {
   try {
@@ -269,9 +141,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "Text is required" }, { status: 400 });
     }
 
-    const detectedLanguage = detectLanguage(text);
-    const prompt = getPromptForLanguage(detectedLanguage, text);
-    
+    // The prompt is now universal and always in English.
+    // We no longer need to switch prompts based on detected language.
+    const prompt = buildUniversalPrompt(text);
+
+
     const modelName = process.env.OPENAI_MODEL || "gpt-4o";
     const apiKey = process.env.OPENAI_API_KEY;
     

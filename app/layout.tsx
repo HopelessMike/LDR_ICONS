@@ -4,8 +4,8 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'St0ry Ic0n1z3r',
+  description: 'symbolic_extraction_unit.exe',
   generator: 'v0.app',
 }
 
