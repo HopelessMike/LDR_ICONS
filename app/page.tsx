@@ -9,6 +9,7 @@ import { TerminalText } from "@/components/terminal-text"
 import { audioSystem } from "@/lib/audio"
 import { AudioControl } from "@/components/audio-control"
 import LoadingScreen from "@/components/LoadingScreen"
+import LetterGlitch from "@/components/letter-glitch-background"
 
 interface AnalysisResult {
   title: string
@@ -234,46 +235,57 @@ export default function StoryIconizer() {
 
   return (
     <div 
-      className="min-h-screen bg-black text-white relative flex flex-col overflow-hidden main-container"
+      className="h-dvh bg-black text-white relative flex flex-col overflow-hidden main-container"
       style={{
         '--mouse-x': `${mousePosition.x}px`,
         '--mouse-y': `${mousePosition.y}px`,
       } as React.CSSProperties}
     >
-      <AudioControl optionsGlitchActive={optionsGlitchActive} />
-      <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-red-950/20 via-black to-cyan-950/20" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(220,38,38,0.1)_25%,rgba(220,38,38,0.1)_26%,transparent_27%,transparent_74%,rgba(6,182,212,0.1)_75%,rgba(6,182,212,0.1)_76%,transparent_77%)] bg-[length:100%_18px]" />
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent animate-pulse" />
-        <div
-          className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-        <div className="absolute inset-0 static-overlay" />
+      {/* Letter Glitch Background with configured parameters */}
+      <LetterGlitch
+        glitchSpeed={10}
+        centerVignette={false}
+        outerVignette={true}
+        smooth={true}
+      />
+      
+      {/* Background vignette across entire screen */}
+      <div className="background-vignette-overlay" />
+
+      {/* Additional subtle overlay for depth */}
+      <div className="fixed inset-0 z-[2] pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/40" />
       </div>
       
-      <div className={`relative z-10 flex flex-col h-full container mx-auto px-4 py-8 transition-transform duration-500 ${isShaking ? 'animate-shake' : ''}`}>
+      <AudioControl optionsGlitchActive={optionsGlitchActive} />
+      
+      <div className={`relative z-10 flex flex-col h-full container mx-auto px-4 py-6 md:py-8 transition-transform duration-500 ${isShaking ? 'animate-shake' : ''}`}>
         <div className={`text-center flex-shrink-0 mb-8 transition-all duration-700 px-4 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 relative break-words">{renderTitle()}</h1>
-          <div className="text-xs md:text-sm font-mono text-gray-400 tracking-widest opacity-75 break-words px-2 subtle-glow">
-            &gt; symbolic_extraction_unit.exe
+          {/* Title with local vignette for readability */}
+          <div className="title-vignette-wrapper">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-4 relative break-words">{renderTitle()}</h1>
+            <div className="text-xs md:text-sm font-mono text-gray-400 tracking-widest opacity-75 break-words px-2 subtle-glow">
+              &gt; symbolic_extraction_unit.exe
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full">
-          <div className={`space-y-6 mb-8 transition-all duration-700 delay-200 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-            <div className="relative">
+        <div className="flex-1 flex flex-col justify-center max-w-4xl mx-auto w-full overflow-hidden">
+          <div className={`space-y-6 mb-6 md:mb-8 transition-all duration-700 delay-200 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+            {/* Textarea with enhanced vignette */}
+            <div className="relative component-vignette-wrapper">
               <Textarea
                 placeholder="> input_narrative_data..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="min-h-[120px] md:min-h-[150px] lg:min-h-[180px] w-full bg-black/90 border border-gray-800 text-red-400 font-mono text-base md:text-lg placeholder:text-gray-600 focus:border-red-500 focus:ring-red-500/20 resize-none transition-all duration-300"
+                className="min-h-[120px] md:min-h-[150px] lg:min-h-[180px] w-full bg-black/95 border border-gray-800 text-red-400 font-mono text-base md:text-lg placeholder:text-gray-600 focus:border-red-500 focus:ring-red-500/20 resize-none transition-all duration-300 relative z-1"
                 disabled={isAnalyzing}
               />
-              <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600">{inputText.length}/∞</div>
+              <div className="absolute bottom-3 right-3 text-xs font-mono text-gray-600 z-2">{inputText.length}/∞</div>
             </div>
 
+            {/* Button */}
             <div className="flex justify-center">
               <button
                 onClick={handleAnalyze}
@@ -289,17 +301,22 @@ export default function StoryIconizer() {
               </button>
             </div>
 
+            {/* Error message with vignette */}
             {error && (
               <div className="text-center">
-                <div className="text-yellow-400 font-mono text-sm border border-yellow-700/50 bg-yellow-900/20 p-3 rounded">
-                  &gt; SYSTEM_ALERT: {error}
+                <div className="component-vignette-wrapper inline-block">
+                  <div className="text-yellow-400 font-mono text-sm border border-yellow-700/50 bg-yellow-900/20 p-3 rounded">
+                    &gt; SYSTEM_ALERT: {error}
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
+          {/* Results section */}
           <div className={`space-y-8 min-h-[300px] md:min-h-[350px] flex flex-col justify-center transition-all duration-700 delay-300 ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
-            <div className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 flex-wrap">
+            {/* Icons */}
+            <div className="icons-vignette mx-auto flex justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 flex-wrap">
               {Array.from({ length: 3 }).map((_, index) => (
                 <IconReveal
                   key={index}
@@ -313,9 +330,10 @@ export default function StoryIconizer() {
               ))}
             </div>
 
-            <div className="text-center space-y-4 min-h-[120px] md:min-h-[100px] flex flex-col justify-center mt-8 px-4">
+            {/* LLM generated text with vignette */}
+            <div className="text-center space-y-4 min-h-[100px] flex flex-col justify-center mt-6 md:mt-8 px-4 overflow-hidden">
               {result && showResult && (
-                <div className="space-y-4">
+                <div className="space-y-4 llm-content-vignette">
                   {showTitle && (
                     <div className="flex justify-center px-2">
                       <TerminalText

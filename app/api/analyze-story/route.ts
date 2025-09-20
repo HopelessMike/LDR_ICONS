@@ -79,6 +79,138 @@ function mapIconToValid(iconName: string): string {
   return 'help';
 }
 
+type AnalysisSymbol = { icon: string; reason: string };
+type AnalysisObject = { title: string; logline: string; symbols: AnalysisSymbol[] };
+
+const DOMAIN_TO_ICONS: Record<string, string[]> = {
+  TECHNOLOGY: [
+    'cpu','circuit','bot','dna','microscope','lightbulb','plug','power','radio','rocket','telescope','storage','usb','memory_stick','monitor','smartphone','laptop','wifi','antenna','battery','battery_charging'
+  ].filter(i => validIconsSet.has(i)),
+  NATURE: [
+    'tree','leaf','flower','water','storm','mountain','pine','sprout','wolf','raven','turtle','dog','cat','fish','rabbit','sun','rain','snow','sunrise','sunset'
+  ].filter(i => validIconsSet.has(i)),
+  COSMOS: [
+    'star','moon','nebula','eclipse','satellite','prism','vortex','quantum','eclipse_icon'
+  ].filter(i => validIconsSet.has(i)),
+  EMOTION: [
+    'heart','frown','smile','laugh','heart_crack','ghost'
+  ].filter(i => validIconsSet.has(i)),
+  CONFLICT: [
+    'sword','shield','crosshair','bomb','flame','skull','shield_check','shield_x'
+  ].filter(i => validIconsSet.has(i)),
+  JOURNEY: [
+    'compass','map_pinned','target','ship','train','car','rocket','sailboat','plane','bike'
+  ].filter(i => validIconsSet.has(i)),
+  TIME: ['hourglass','clock','timer','stopwatch','sunrise','sunset'].filter(i => validIconsSet.has(i)),
+  SOCIETY: [
+    'crown','users','handshake','briefcase','coins','book','school','graduation','trophy','medal','award'
+  ].filter(i => validIconsSet.has(i)),
+  OBJECTS: [
+    'key','lock','camera','microphone','pen','puzzle','gift','paintbrush','palette','wand','wand_sparkles','camera','video','phone','mail','message'
+  ].filter(i => validIconsSet.has(i))
+};
+
+const ICON_TO_DOMAIN: Record<string, string> = Object.keys(DOMAIN_TO_ICONS).reduce((acc, domain) => {
+  for (const icon of DOMAIN_TO_ICONS[domain]) acc[icon] = domain;
+  return acc;
+}, {} as Record<string, string>);
+
+const DOMAIN_KEYWORDS: Record<string, string[]> = {
+  TECHNOLOGY: ['tech','robot','ai','code','computer','server','network','data','digital','cyber','chip','machine','algorithm'],
+  NATURE: ['forest','tree','river','ocean','sea','mountain','animal','wolf','leaf','flower','nature','organic','garden','earth'],
+  COSMOS: ['space','star','planet','moon','galaxy','cosmos','nebula','eclipse','astronaut','comet'],
+  EMOTION: ['love','fear','joy','sad','hope','hate','anger','dream','nightmare','heart'],
+  CONFLICT: ['war','battle','fight','conflict','weapon','fire','death','danger','threat','enemy'],
+  JOURNEY: ['journey','travel','path','mission','quest','explore','navigation','road','voyage'],
+  TIME: ['time','future','past','memory','clock','timer','age','era','moment'],
+  SOCIETY: ['king','queen','people','society','city','work','money','market','crown','crowd','school'],
+  OBJECTS: ['key','lock','camera','phone','gift','tool','book','pen','puzzle','artifact','device']
+};
+
+function hashString(input: string): number {
+  let h = 0;
+  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function pickIconForDomain(domain: string, used: Set<string>, seed: number): string | null {
+  const list = DOMAIN_TO_ICONS[domain];
+  if (!list || list.length === 0) return null;
+  const start = seed % list.length;
+  for (let i = 0; i < list.length; i++) {
+    const candidate = list[(start + i) % list.length];
+    if (!used.has(candidate)) return candidate;
+  }
+  return null;
+}
+
+function computeDomainScores(text: string): Record<string, number> {
+  const lower = text.toLowerCase();
+  const scores: Record<string, number> = {};
+  for (const domain of Object.keys(DOMAIN_KEYWORDS)) {
+    scores[domain] = 0;
+    for (const kw of DOMAIN_KEYWORDS[domain]) {
+      if (lower.includes(kw)) scores[domain] += 1;
+    }
+  }
+  return scores;
+}
+
+function diversifyIcons(result: AnalysisObject, userText: string): AnalysisObject {
+  const seed = hashString(userText);
+  const used = new Set<string>();
+  const domainScores = computeDomainScores(userText);
+
+  // Normalize icons and ensure uniqueness first
+  const normalized: AnalysisSymbol[] = result.symbols.map(s => ({
+    icon: mapIconToValid(s.icon),
+    reason: s.reason
+  }));
+
+  // Replace duplicates and non-valids
+  for (let i = 0; i < normalized.length; i++) {
+    let icon = normalized[i].icon;
+    if (!validIconsSet.has(icon) || used.has(icon)) {
+      // pick best domain by score not yet represented
+      const sortedDomains = Object.keys(domainScores).sort((a,b) => domainScores[b] - domainScores[a]);
+      let replacement: string | null = null;
+      for (const domain of sortedDomains) {
+        const candidate = pickIconForDomain(domain, used, seed + i);
+        if (candidate) { replacement = candidate; break; }
+      }
+      if (!replacement) {
+        // fallback from any domain
+        for (const domain of Object.keys(DOMAIN_TO_ICONS)) {
+          const candidate = pickIconForDomain(domain, used, seed + i + 7);
+          if (candidate) { replacement = candidate; break; }
+        }
+      }
+      if (replacement) icon = replacement;
+    }
+    normalized[i].icon = icon;
+    used.add(icon);
+  }
+
+  // Ensure diversity across at least two domains
+  const domainsPresent = new Set(normalized.map(s => ICON_TO_DOMAIN[s.icon]).filter(Boolean));
+  if (domainsPresent.size < 2) {
+    // Find a high-score domain not present and replace the third icon
+    const sortedDomains = Object.keys(domainScores).sort((a,b) => domainScores[b] - domainScores[a]);
+    for (const domain of sortedDomains) {
+      if (!domainsPresent.has(domain)) {
+        const candidate = pickIconForDomain(domain, used, seed + 13);
+        if (candidate) {
+          normalized[normalized.length - 1].icon = candidate;
+          used.add(candidate);
+        }
+        break;
+      }
+    }
+  }
+
+  return { ...result, symbols: normalized };
+}
+
 // --- INIZIO MODIFICHE: PROMPT UNIVERSALE ---
 
 /**
@@ -105,6 +237,7 @@ Your primary function is to analyze narrative data streams (stories, fragments, 
 3. **ABSOLUTE ICON VALIDITY**: Icons must be chosen EXCLUSIVELY from the list in [AVAILABLE_ICONS]. No variations are allowed.
 4. **MANDATORY JSON FORMAT**: The entire response MUST be a single valid JSON code block.
 5. **SELF-CORRECTION**: Before responding, meticulously verify that each chosen icon is EXACTLY as written in the [AVAILABLE_ICONS] list. If not, find the best valid alternative from the list.
+6. **DIVERSITY BY DOMAIN**: Choose icons from AT LEAST TWO DISTINCT semantic domains among: TECHNOLOGY, NATURE, COSMOS, EMOTION, CONFLICT, JOURNEY, TIME, SOCIETY, OBJECTS. Prefer variety unless the story is strongly focused on one domain.
 
 [STYLISTIC GUIDELINES - ENGLISH ONLY]
 - **Title (3-Step Process)**: To ensure a high-quality title, follow these steps EXACTLY:
@@ -115,6 +248,17 @@ Your primary function is to analyze narrative data streams (stories, fragments, 
 - **Logline**: A single broken sentence IN ENGLISH that sounds like a terminal output (e.g., "->", "::", "[STATUS: ...]", "...SIGNAL_LOST").
 - **Icon Reason**: An extremely concise (2-3 words max) system diagnosis IN ENGLISH and UPPERCASE.
 - **Icon Strategy**: Icons must have a strong thematic connection to the story's core concepts.
+
+[ICON_TAXONOMY]
+- TECHNOLOGY: cpu, circuit, robot (bot), dna, microscope, lightbulb, plug, power, radio, rocket, telescope
+- NATURE: tree, leaf, flower, water, storm, mountain, pine, sprout, animal icons (wolf, raven, turtle, dog, cat, fish, rabbit)
+- COSMOS: star, moon, nebula, eclipse, satellite, prism, vortex, quantum
+- EMOTION: heart, frown, smile, laugh, heart_crack, ghost (fear)
+- CONFLICT: sword, shield, crosshair, bomb, flame, skull
+- JOURNEY: compass, map_pinned, target, ship, train, car, rocket
+- TIME: hourglass, clock, timer, sunrise, sunset
+- SOCIETY: crown, users, handshake, briefcase, coins, book, school, graduation
+- OBJECTS: key, lock, camera, microphone, pen, puzzle, trophy, gift
 
 [AVAILABLE_ICONS]
 ${availableIcons}
@@ -162,7 +306,7 @@ export async function POST(request: Request) {
         model: openai(modelName),
         schema: analysisSchema,
         prompt,
-        temperature: 0.6, 
+        temperature: 0.7,
       });
 
       const allIconsAreValid = object.symbols.every(symbol => 
@@ -176,12 +320,14 @@ export async function POST(request: Request) {
           icon: mapIconToValid(symbol.icon),
         })),
       };
-      
-      lastResult = validatedObject;
+
+      // Post-process to improve semantic adherence and diversity across icon domains
+      const diversified = diversifyIcons(validatedObject, text);
+      lastResult = diversified;
 
       if (allIconsAreValid) {
         console.log(`Valid icons found on attempt ${attempt + 1}.`);
-        return Response.json(validatedObject);
+        return Response.json(diversified);
       }
 
       console.warn(`Attempt ${attempt + 1} failed: LLM generated invalid icons. Retrying...`);

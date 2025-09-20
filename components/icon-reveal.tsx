@@ -385,13 +385,15 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
   const [currentIcon, setCurrentIcon] = useState(initialIcons[slotIndex] || "terminal")
   const [isLocked, setIsLocked] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-  const animationIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const animationIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const [displayIcon, setDisplayIcon] = useState(initialIcons[slotIndex] || "terminal") // Icona effettivamente mostrata
   const [isEpicLocking, setIsEpicLocking] = useState(false)
   const [glitchType, setGlitchType] = useState<'normal' | 'intense'>('normal')
   const [isRolling, setIsRolling] = useState(false);
   const [individualGlitchActive, setIndividualGlitchActive] = useState(false);
   const [currentReason, setCurrentReason] = useState(initialReasons[slotIndex] || "system_module")
+  const [containerGlitchActive, setContainerGlitchActive] = useState(false)
+  const [iconGlitchActive, setIconGlitchActive] = useState(false)
 
   // Main effect for controlling icon states (rolling, locking, idle)
   useEffect(() => {
@@ -464,6 +466,33 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
       }
     };
   }, []);
+
+  // Independent idle glitch for container and icon (timing independent per slot)
+  useEffect(() => {
+    if (!isAnalyzing && !isRolling && !show) {
+      const scheduleContainer = () => {
+        const delay = 8000 + Math.random() * 12000 + slotIndex * 500;
+        const t = setTimeout(() => {
+          setContainerGlitchActive(true);
+          setTimeout(() => setContainerGlitchActive(false), 250);
+          scheduleContainer();
+        }, delay);
+        return () => clearTimeout(t);
+      };
+      const scheduleIcon = () => {
+        const delay = 9000 + Math.random() * 14000 + slotIndex * 700;
+        const t = setTimeout(() => {
+          setIconGlitchActive(true);
+          setTimeout(() => setIconGlitchActive(false), 250);
+          scheduleIcon();
+        }, delay);
+        return () => clearTimeout(t);
+      };
+      const c = scheduleContainer();
+      const i = scheduleIcon();
+      return () => { c(); i(); };
+    }
+  }, [isAnalyzing, isRolling, show, slotIndex])
   
   // Independent glitch system for each icon - idle icons
   useEffect(() => {
@@ -538,13 +567,14 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
   const lockedTextColorClass = isError ? "text-yellow-400" : "text-red-400"
 
   return (
-    <div className="relative">
+    <div className="relative w-24 sm:w-28 md:w-36 lg:w-40 shrink-0">
       <div
         className={cn(
-          "w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 border-2 bg-black/90 flex items-center justify-center relative overflow-hidden cursor-pointer transition-all duration-500",
+          "w-full h-24 sm:h-28 md:h-36 lg:h-40 border-2 bg-black/90 flex items-center justify-center relative overflow-hidden cursor-pointer transition-colors duration-500",
           (isAnalyzing || isRolling) && "border-gray-600/70 shadow-[0_0_30px_rgba(156,163,175,0.3)] animate-static-overlay-border", // Static/noise border during analysis
           isLocked && lockedColorClass,
           !isAnalyzing && !isRolling && !show && "border-gray-800/50",
+          !isAnalyzing && !isRolling && !show && containerGlitchActive && "animate-idle-glitch",
         )}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
@@ -558,6 +588,7 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
             !isAnalyzing && !isRolling && !show && !individualGlitchActive && "text-gray-600", // Normal idle state
             isLocked && individualGlitchActive && "animate-locked-icon-glitch", // Enhanced glitch for locked icons
             isEpicLocking && "animate-epic-lock", // Epic effect quando si blocca
+            !isAnalyzing && !isRolling && !show && iconGlitchActive && "animate-idle-glitch",
           )}
         />
 
@@ -573,7 +604,7 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
 
       {showTooltip && currentReason && (
         <div className={cn(
-            "absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-black/95 p-2 md:p-3 rounded text-xs font-mono max-w-xs z-20 animate-fade-in tooltip-glitch", // Glitch sul tooltip
+            "absolute left-1/2 top-0 -translate-x-1/2 -translate-y-full -mt-2 bg-black/95 p-2 md:p-3 rounded text-xs font-mono max-w-xs z-20 animate-fade-in tooltip-glitch pointer-events-none",
              isError 
                 ? "border border-yellow-700/50 text-yellow-400 shadow-[0_0_20px_rgba(250,204,21,0.2)]"
                 : isLocked
@@ -585,10 +616,16 @@ export function IconReveal({ icon, reason, show, isAnalyzing, isError, slotIndex
         </div>
       )}
 
-      <div className="absolute -bottom-6 md:-bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-mono text-center w-24">
-        {(isAnalyzing || isRolling) && <span className="text-gray-400 animate-pulse">SCANNING_DATA...</span>}
-        {isLocked && <span className={lockedTextColorClass}>{isError ? "SYSTEM_CORRUPTED" : "_L0CKED_"}</span>}
-        {!isAnalyzing && !isRolling && !show && <span className="text-gray-600">IDLE_SCAN</span>}
+      <div className="absolute -bottom-6 md:-bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-mono text-center w-24 font-bold">
+        {(isAnalyzing || isRolling) && (
+          <span className="icon-label-vignette text-gray-400 animate-pulse">SCANNING_DATA...</span>
+        )}
+        {isLocked && (
+          <span className={cn("icon-label-vignette", lockedTextColorClass)}>{isError ? "SYSTEM_CORRUPTED" : "_L0CKED_"}</span>
+        )}
+        {!isAnalyzing && !isRolling && !show && (
+          <span className="icon-label-vignette text-gray-600">IDLE_SCAN</span>
+        )}
       </div>
     </div>
   )
